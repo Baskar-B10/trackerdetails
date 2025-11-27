@@ -49,7 +49,7 @@ jobs:
       - name: Set Docker image names
         run: |
           echo "GHCR_IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:latest" >> $GITHUB_ENV
-          echo "DOCKERHUB_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest" >> $GITHUB_ENV
+          echo "DOCKERHUB_IMAGE=boss10/trackerdetails:latest" >> $GITHUB_ENV
 
       - name: Log in to GHCR
         uses: docker/login-action@v2

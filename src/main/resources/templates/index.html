@@ -10,146 +10,158 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <style>
 :root {
-  --bg: #080d18;
-  --surface: #0f1624;
-  --card: #131c2e;
-  --card2: #172035;
-  --border: #1e2d47;
-  --border2: #243450;
-  --green: #10d48e;
-  --green2: #0ea572;
-  --gold: #f0b429;
-  --red: #f04f58;
-  --blue: #3b9eff;
-  --purple: #9b6dff;
-  --text: #e2eaf5;
-  --muted: #7a90b0;
-  --muted2: #4e6180;
-  --hover: #1a2640;
+  --bg:#080d18;--surface:#0f1624;--card:#131c2e;--card2:#172035;
+  --border:#1e2d47;--border2:#243450;
+  --green:#10d48e;--green2:#0ea572;--gold:#f0b429;--red:#f04f58;
+  --blue:#3b9eff;--purple:#9b6dff;--text:#e2eaf5;--muted:#7a90b0;
+  --muted2:#4e6180;--hover:#1a2640;--custom:#1a2d1a;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; min-height: 100vh; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
-/* ── TOP BAR ── */
-.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--text); text-decoration: none; }
-.logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--green), #0ea572); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-.logo span { color: var(--green); }
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-.year-selector { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; }
-.year-selector:focus { outline: none; border-color: var(--green); }
-.btn-export { background: linear-gradient(135deg, #0ea572, #0c9060); color: #fff; border: none; padding: 7px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity .2s; }
-.btn-export:hover { opacity: .85; }
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--green),#0ea572);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo span{color:var(--green)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.year-selector{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:14px;cursor:pointer;min-width:90px}
+.year-selector:focus{outline:none;border-color:var(--green)}
+.btn-add-year{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px;transition:all .2s;display:flex;align-items:center;gap:5px}
+.btn-add-year:hover{border-color:var(--green);color:var(--green)}
+.btn-export{background:linear-gradient(135deg,#0ea572,#0c9060);color:#fff;border:none;padding:7px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s}
+.btn-export:hover{opacity:.85}
 
-/* ── TAB NAV ── */
-.tabnav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 4px; }
-.tabnav-item { padding: 12px 20px; cursor: pointer; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; transition: all .2s; display: flex; align-items: center; gap: 7px; font-size: 13.5px; white-space: nowrap; }
-.tabnav-item:hover { color: var(--text); background: var(--hover); }
-.tabnav-item.active { color: var(--green); border-bottom-color: var(--green); }
+/* TAB NAV */
+.tabnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto}
+.tabnav::-webkit-scrollbar{height:3px}
+.tabnav-item{padding:12px 18px;cursor:pointer;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;transition:all .2s;display:flex;align-items:center;gap:7px;font-size:13.5px;white-space:nowrap}
+.tabnav-item:hover{color:var(--text);background:var(--hover)}
+.tabnav-item.active{color:var(--green);border-bottom-color:var(--green)}
 
-/* ── CONTENT ── */
-.main-content { padding: 24px; max-width: 1600px; margin: 0 auto; }
-.tab-pane { display: none; }
-.tab-pane.active { display: block; }
+/* CONTENT */
+.main-content{padding:24px;max-width:1600px;margin:0 auto}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
 
-/* ── KPI CARDS ── */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
-.kpi-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.kpi-card.spending::after { background: linear-gradient(90deg, var(--red), #ff8a70); }
-.kpi-card.investment::after { background: linear-gradient(90deg, var(--green), #4ade80); }
-.kpi-card.income::after { background: linear-gradient(90deg, var(--blue), #7dd3fc); }
-.kpi-card.savings::after { background: linear-gradient(90deg, var(--gold), #fde68a); }
-.kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
-.kpi-card.spending .kpi-icon { background: rgba(240,79,88,.15); color: var(--red); }
-.kpi-card.investment .kpi-icon { background: rgba(16,212,142,.15); color: var(--green); }
-.kpi-card.income .kpi-icon { background: rgba(59,158,255,.15); color: var(--blue); }
-.kpi-card.savings .kpi-icon { background: rgba(240,180,41,.15); color: var(--gold); }
-.kpi-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .6px; font-weight: 500; margin-bottom: 6px; }
-.kpi-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-.kpi-sub { font-size: 11.5px; color: var(--muted); }
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-card.spending::after{background:linear-gradient(90deg,var(--red),#ff8a70)}
+.kpi-card.investment::after{background:linear-gradient(90deg,var(--green),#4ade80)}
+.kpi-card.income::after{background:linear-gradient(90deg,var(--blue),#7dd3fc)}
+.kpi-card.savings::after{background:linear-gradient(90deg,var(--gold),#fde68a)}
+.kpi-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.kpi-card.spending .kpi-icon{background:rgba(240,79,88,.15);color:var(--red)}
+.kpi-card.investment .kpi-icon{background:rgba(16,212,142,.15);color:var(--green)}
+.kpi-card.income .kpi-icon{background:rgba(59,158,255,.15);color:var(--blue)}
+.kpi-card.savings .kpi-icon{background:rgba(240,180,41,.15);color:var(--gold)}
+.kpi-label{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:500;margin-bottom:6px}
+.kpi-value{font-size:24px;font-weight:700;margin-bottom:4px}
+.kpi-sub{font-size:11.5px;color:var(--muted)}
 
-/* ── CHARTS ── */
-.chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
-.chart-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.chart-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
-.chart-wrap { position: relative; }
+/* CHARTS */
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.chart-grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px}
 
-/* ── SPREADSHEET TABLE ── */
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.section-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.section-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
-.badge-red { background: rgba(240,79,88,.15); color: var(--red); }
-.badge-green { background: rgba(16,212,142,.15); color: var(--green); }
-.badge-blue { background: rgba(59,158,255,.15); color: var(--blue); }
-.badge-gold { background: rgba(240,180,41,.15); color: var(--gold); }
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.section-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.badge-red{background:rgba(240,79,88,.15);color:var(--red)}
+.badge-green{background:rgba(16,212,142,.15);color:var(--green)}
+.badge-blue{background:rgba(59,158,255,.15);color:var(--blue)}
+.badge-gold{background:rgba(240,180,41,.15);color:var(--gold)}
 
-.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.fin-table-container { overflow-x: auto; max-height: 70vh; overflow-y: auto; }
-.fin-table { width: 100%; border-collapse: collapse; min-width: 1100px; }
-.fin-table thead { position: sticky; top: 0; z-index: 10; }
-.fin-table thead th { background: #0d1929; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; padding: 10px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border2); }
-.fin-table thead th:first-child { text-align: left; position: sticky; left: 0; background: #0d1929; z-index: 11; width: 200px; min-width: 200px; }
-.fin-table tbody tr { border-bottom: 1px solid rgba(30,45,71,.5); transition: background .15s; }
-.fin-table tbody tr:hover:not(.group-row):not(.total-row) { background: var(--hover); }
-.fin-table td { padding: 0; font-size: 13px; vertical-align: middle; }
-.fin-table td:first-child { position: sticky; left: 0; background: var(--card); z-index: 5; }
-.fin-table tbody tr:hover td:first-child { background: var(--hover); }
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.fin-table-container{overflow-x:auto;max-height:72vh;overflow-y:auto}
+.fin-table{width:100%;border-collapse:collapse;min-width:1200px}
+.fin-table thead{position:sticky;top:0;z-index:10}
+.fin-table thead th{background:#0d1929;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;padding:10px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--border2)}
+.fin-table thead th:first-child{text-align:left;position:sticky;left:0;background:#0d1929;z-index:11;width:210px;min-width:210px}
+.fin-table thead th.th-actions{width:36px;min-width:36px;text-align:center}
+.fin-table tbody tr{border-bottom:1px solid rgba(30,45,71,.4);transition:background .15s}
+.fin-table tbody tr:hover:not(.group-row):not(.total-row):not(.add-row){background:var(--hover)}
+.fin-table td{padding:0;font-size:13px;vertical-align:middle}
+.fin-table td:first-child{position:sticky;left:0;background:var(--card);z-index:5}
+.fin-table tbody tr:hover td:first-child:not(.group-row td):not(.total-row td){background:var(--hover)}
 
-.cat-cell { padding: 9px 12px; color: var(--text); font-size: 13px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-.cat-cell i { color: var(--muted2); font-size: 12px; }
+.cat-cell{padding:8px 12px;color:var(--text);font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.cat-cell.custom-cat{color:var(--green);font-style:italic}
+.cat-cell i.icon{color:var(--muted2);font-size:11px}
 
-.num-cell { padding: 9px 10px; text-align: right; color: var(--text); cursor: pointer; position: relative; min-width: 80px; transition: background .15s; }
-.num-cell:hover { background: rgba(59,158,255,.08); }
-.num-cell.has-value { color: var(--text); }
-.num-cell.zero { color: var(--muted2); }
-.num-cell input { width: 100%; background: transparent; border: none; outline: none; color: var(--blue); text-align: right; font-size: 13px; font-family: 'Inter', sans-serif; padding: 0; }
+.num-cell{padding:8px 10px;text-align:right;cursor:pointer;position:relative;min-width:82px;transition:background .15s}
+.num-cell:hover{background:rgba(59,158,255,.08)}
+.num-cell input{width:100%;background:transparent;border:none;outline:none;color:var(--blue);text-align:right;font-size:13px;font-family:'Inter',sans-serif;padding:0}
 
-.total-cell { padding: 9px 10px; text-align: right; font-weight: 600; color: var(--green); background: rgba(16,212,142,.04); min-width: 100px; }
-.avg-cell { padding: 9px 10px; text-align: right; color: var(--muted); background: rgba(16,212,142,.02); min-width: 90px; font-size: 12px; }
+.total-cell{padding:8px 10px;text-align:right;font-weight:600;color:var(--green);background:rgba(16,212,142,.04);min-width:100px}
+.avg-cell{padding:8px 10px;text-align:right;color:var(--muted);background:rgba(16,212,142,.02);min-width:90px;font-size:12px}
+.action-cell{padding:4px;text-align:center;min-width:36px}
 
-.group-row td { background: #0d1929 !important; padding: 6px 12px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); border-top: 1px solid var(--border2); }
-.total-row td { background: rgba(16,212,142,.05) !important; font-weight: 700; border-top: 2px solid var(--border2); }
-.total-row td:first-child { color: var(--green); }
-.total-row .num-cell { color: var(--green); cursor: default; }
-.total-row .num-cell:hover { background: transparent; }
-.total-row .total-cell { color: var(--green); font-size: 14px; }
+.group-row td{background:#0d1929!important;padding:6px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-top:1px solid var(--border2)}
+.group-row.custom-group td{background:rgba(16,212,142,.05)!important;color:var(--green)}
+.total-row td{background:rgba(16,212,142,.05)!important;font-weight:700;border-top:2px solid var(--border2)}
+.total-row td:first-child .cat-cell{color:var(--green)}
+.total-row .num-cell{color:var(--green);cursor:default}
+.total-row .num-cell:hover{background:transparent}
+.total-row .total-cell{color:var(--green);font-size:14px}
+.grand-total-row td{background:rgba(16,212,142,.1)!important;border-top:2px solid var(--green2)!important}
 
-/* ── ANALYSIS CHARTS ── */
-.analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.analysis-full { grid-column: 1 / -1; }
+/* ADD ROW */
+.add-row td{background:transparent!important;border:none!important}
+.btn-add-row{width:100%;background:transparent;border:1px dashed var(--border2);color:var(--muted2);padding:8px 14px;border-radius:0;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-add-row:hover{border-color:var(--green);color:var(--green);background:rgba(16,212,142,.04)}
 
-/* ── TOOLTIP / SAVE INDICATOR ── */
-.save-indicator { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(8px); transition: all .3s; z-index: 999; display: flex; align-items: center; gap: 8px; }
-.save-indicator.show { opacity: 1; transform: translateY(0); }
+/* ADD ROW INPUT */
+.add-input-row td{background:rgba(16,212,142,.05)!important}
+.add-cat-input{background:var(--card2);border:1px solid var(--green);color:var(--text);padding:7px 12px;border-radius:6px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:100%}
+.add-cat-input::placeholder{color:var(--muted2)}
+.btn-confirm-add{background:var(--green2);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-confirm-add:hover{opacity:.85}
+.btn-cancel-add{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.btn-cancel-add:hover{border-color:var(--red);color:var(--red)}
 
-/* ── MONTH LABELS ── */
-.month-col { min-width: 80px; }
-.th-total { color: var(--green) !important; min-width: 100px; }
-.th-avg { min-width: 90px; }
+/* DELETE BTN */
+.btn-del-row{background:transparent;border:none;color:var(--muted2);cursor:pointer;padding:4px 6px;border-radius:4px;font-size:12px;transition:all .2s;line-height:1}
+.btn-del-row:hover{color:var(--red);background:rgba(240,79,88,.1)}
 
-/* ── NO DATA ── */
-.no-data { text-align: center; padding: 60px 20px; color: var(--muted); }
-.no-data i { font-size: 40px; margin-bottom: 12px; display: block; }
+/* YEAR MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;width:340px;max-width:95vw}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.modal-input{background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:8px;font-size:14px;width:100%;font-family:'Inter',sans-serif;outline:none;margin-bottom:14px}
+.modal-input:focus{border-color:var(--green)}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.btn-modal-ok{background:var(--green2);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-modal-cancel{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer}
 
-/* ── SUMMARY ROW in analysis ── */
-.summary-table { width: 100%; border-collapse: collapse; }
-.summary-table th, .summary-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
-.summary-table th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; }
-.summary-table .val { text-align: right; font-weight: 600; }
-.summary-table tr:hover { background: var(--hover); }
+/* ANALYSIS */
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.analysis-full{grid-column:1/-1}
+.summary-table{width:100%;border-collapse:collapse}
+.summary-table th,.summary-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+.summary-table th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase}
+.summary-table .val{text-align:right;font-weight:600}
+.summary-table tr:hover{background:var(--hover)}
+
+/* INDICATORS */
+.save-indicator{position:fixed;bottom:24px;right:24px;background:var(--green2);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;opacity:0;transform:translateY(8px);transition:all .3s;z-index:999;display:flex;align-items:center;gap:8px}
+.save-indicator.show{opacity:1;transform:translateY(0)}
 
 /* scrollbar */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--surface); }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted2)}
 
-@media (max-width: 900px) {
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .chart-grid, .chart-grid2 { grid-template-columns: 1fr; }
-  .analysis-grid { grid-template-columns: 1fr; }
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-grid,.chart-grid2{grid-template-columns:1fr}
+  .analysis-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -157,12 +169,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <a class="logo" href="/">
-    <div class="logo-icon">₹</div>
-    Fin<span>Vault</span>
-  </a>
+  <a class="logo" href="/"><div class="logo-icon">₹</div>Fin<span>Vault</span></a>
   <div class="topbar-right">
     <select class="year-selector" id="yearSelector" onchange="onYearChange(this.value)"></select>
+    <button class="btn-add-year" onclick="showAddYearModal()" title="Track a different year">
+      <i class="bi bi-plus-lg"></i> Year
+    </button>
     <button class="btn-export" onclick="exportExcel()"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
   </div>
 </div>
@@ -177,7 +189,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
   <div class="tabnav-item" onclick="showTab('analysis',this)"><i class="bi bi-bar-chart-line"></i> Analysis</div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- CONTENT -->
 <div class="main-content">
 
   <!-- DASHBOARD -->
@@ -205,90 +217,80 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
         <div class="kpi-icon"><i class="bi bi-wallet2"></i></div>
         <div class="kpi-label">Net Outflow</div>
         <div class="kpi-value" id="kpi-net">—</div>
-        <div class="kpi-sub" id="kpi-net-sub">Spending + Investment − Income</div>
+        <div class="kpi-sub">Spending + Investment − Income</div>
       </div>
     </div>
-
     <div class="chart-grid">
       <div class="chart-card">
         <div class="chart-title">Monthly Trend</div>
-        <div class="chart-wrap"><canvas id="chartTrend" height="220"></canvas></div>
+        <canvas id="chartTrend" height="220"></canvas>
       </div>
       <div class="chart-card">
         <div class="chart-title">Portfolio Breakdown</div>
-        <div class="chart-wrap" style="max-height:220px;display:flex;justify-content:center"><canvas id="chartPortfolio" height="220"></canvas></div>
+        <div style="max-height:220px;display:flex;justify-content:center"><canvas id="chartPortfolio" height="220"></canvas></div>
       </div>
     </div>
-
     <div class="chart-grid2">
       <div class="chart-card">
         <div class="chart-title">Top Spending Categories</div>
-        <div class="chart-wrap"><canvas id="chartSpendCat" height="240"></canvas></div>
+        <canvas id="chartSpendCat" height="240"></canvas>
       </div>
       <div class="chart-card">
         <div class="chart-title">Investment Breakdown</div>
-        <div class="chart-wrap" style="max-height:240px;display:flex;justify-content:center"><canvas id="chartInvCat" height="240"></canvas></div>
+        <div style="max-height:240px;display:flex;justify-content:center"><canvas id="chartInvCat" height="240"></canvas></div>
       </div>
     </div>
   </div>
 
-  <!-- SPENDING TAB -->
+  <!-- SPENDING -->
   <div id="tab-spending" class="tab-pane">
     <div class="section-header">
       <div class="section-title"><i class="bi bi-cart3" style="color:var(--red)"></i> Spending Tracker <span class="section-badge badge-red">Monthly</span></div>
-      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit · <i class="bi bi-plus-square"></i> Use Add Row to create custom fields</div>
     </div>
-    <div class="table-wrap">
-      <div class="fin-table-container" id="spending-table-wrap"></div>
-    </div>
+    <div class="table-wrap"><div class="fin-table-container" id="spending-table-wrap"></div></div>
   </div>
 
-  <!-- INVESTMENT TAB -->
+  <!-- INVESTMENT -->
   <div id="tab-investment" class="tab-pane">
     <div class="section-header">
       <div class="section-title"><i class="bi bi-graph-up-arrow" style="color:var(--green)"></i> Investment Tracker <span class="section-badge badge-green">Monthly</span></div>
-      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit · <i class="bi bi-plus-square"></i> Use Add Row to create custom fields</div>
     </div>
-    <div class="table-wrap">
-      <div class="fin-table-container" id="investment-table-wrap"></div>
-    </div>
+    <div class="table-wrap"><div class="fin-table-container" id="investment-table-wrap"></div></div>
   </div>
 
-  <!-- INTEREST / INCOME TAB -->
+  <!-- INTEREST / INCOME -->
   <div id="tab-interest" class="tab-pane">
     <div class="section-header">
       <div class="section-title"><i class="bi bi-cash-coin" style="color:var(--blue)"></i> Interest & Income <span class="section-badge badge-blue">Monthly</span></div>
-      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit · <i class="bi bi-plus-square"></i> Use Add Row to create custom fields</div>
     </div>
-    <div class="table-wrap">
-      <div class="fin-table-container" id="interest-table-wrap"></div>
-    </div>
+    <div class="table-wrap"><div class="fin-table-container" id="interest-table-wrap"></div></div>
   </div>
 
-  <!-- LOAN TAB -->
+  <!-- LOAN -->
   <div id="tab-loan" class="tab-pane">
     <div class="section-header">
       <div class="section-title"><i class="bi bi-bank" style="color:var(--gold)"></i> Loan Tracker <span class="section-badge badge-gold">Monthly</span></div>
-      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit · <i class="bi bi-plus-square"></i> Use Add Row to create custom fields</div>
     </div>
-    <div class="table-wrap">
-      <div class="fin-table-container" id="loan-table-wrap"></div>
-    </div>
+    <div class="table-wrap"><div class="fin-table-container" id="loan-table-wrap"></div></div>
   </div>
 
-  <!-- ANALYSIS TAB -->
+  <!-- ANALYSIS -->
   <div id="tab-analysis" class="tab-pane">
     <div class="analysis-grid">
       <div class="chart-card analysis-full">
-        <div class="chart-title">Monthly Flow Summary (Spending vs Investment vs Income)</div>
-        <canvas id="chartAnalysisFlow" height="120"></canvas>
+        <div class="chart-title">Monthly Flow — Spending vs Investment vs Income</div>
+        <canvas id="chartAnalysisFlow" height="110"></canvas>
       </div>
       <div class="chart-card">
         <div class="chart-title">Cumulative Outflow</div>
         <canvas id="chartCumulative" height="200"></canvas>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Monthly Savings Rate (%)</div>
+        <div class="chart-title">Monthly Income/Outflow Rate (%)</div>
         <canvas id="chartSavingsRate" height="200"></canvas>
       </div>
       <div class="chart-card">
@@ -311,360 +313,447 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 <!-- SAVE INDICATOR -->
 <div class="save-indicator" id="saveIndicator"><i class="bi bi-check-circle-fill"></i> Saved</div>
 
+<!-- ADD YEAR MODAL -->
+<div class="modal-overlay" id="yearModal" style="display:none" onclick="if(event.target===this)closeYearModal()">
+  <div class="modal-box">
+    <div class="modal-title"><i class="bi bi-calendar-plus" style="color:var(--green)"></i> Track a New Year</div>
+    <input class="modal-input" type="number" id="newYearInput" placeholder="e.g. 2025" min="2000" max="2099"
+           onkeydown="if(event.key==='Enter')confirmAddYear()">
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closeYearModal()">Cancel</button>
+      <button class="btn-modal-ok" onclick="confirmAddYear()"><i class="bi bi-check-lg"></i> Add Year</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-// ─── CONSTANTS ─────────────────────────────────────────────────────────────
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-const CATEGORIES = {
-  SPENDING: {
-    groups: [
-      { label: '🏠 Housing & Utilities', items: ['Rent','Electricity Bill','Gas','Maid','Water Can','Repair Works/Installation'] },
-      { label: '🛒 Food & Kitchen',       items: ['Milk','Grocery','Grocery (Detergents/Hair Products)','Vegetables','Flowers','Healthy Snacks','Hotel','Snacks'] },
-      { label: '🚗 Transport',            items: ['Petrol','Travel'] },
-      { label: '💊 Health & Personal',    items: ['Medical','Grooming'] },
-      { label: '📱 Communication',        items: ['Recharge (Phone & Wifi)','Other Bills (Insurance/DTH)'] },
-      { label: '🎭 Entertainment',        items: ['Movie/Entertainment','Outing/Travel for Experience'] },
-      { label: '🛍️ Shopping',             items: ['Shopping (Dress/Gifts)','Shopping for Home','Shopping for Family'] },
-      { label: '📦 Other',               items: ['Extras'] }
-    ]
-  },
-  INVESTMENT: {
-    groups: [
-      { label: '📈 Investments',    items: ['Gold and Silver','SBI Life Insurance','Recurring Deposit (RD)','PPF','Stocks','SBI Jai Nivesh (SIP)','Parag Flexi Cap SIP','Large Cap Fund SIP','Bond Investment (RBI + Corporate)','NPS'] },
-      { label: '👨‍👩‍👧 Sharing',         items: ['Sharing - To Family Member','Sharing - To Family','Sharing - To Relatives'] }
-    ]
-  },
-  INTEREST: {
-    groups: [
-      { label: '💰 Income & Returns', items: ['From Parents/Relatives','Waste Plastic','Sell Product/Coupons','Gas Subsidy','Indian Bank Interest','SBI Interest','ICICI Interest','Post Office Interest','Dividend','Bond Interest','FD/RD Interest','Cashback'] }
-    ]
-  },
-  LOAN: {
-    groups: [
-      { label: '🏦 Loan Repayments', items: ['Gold Loan','Personal Loan','Other Loan'] }
-    ]
-  }
+const DEFAULT_GROUPS = {
+  SPENDING: [
+    { label:'🏠 Housing & Utilities', items:['Rent','Electricity Bill','Gas','Maid','Water Can','Repair Works/Installation'] },
+    { label:'🛒 Food & Kitchen',       items:['Milk','Grocery','Grocery (Detergents/Hair Products)','Vegetables','Flowers','Healthy Snacks','Hotel','Snacks'] },
+    { label:'🚗 Transport',            items:['Petrol','Travel'] },
+    { label:'💊 Health & Personal',    items:['Medical','Grooming'] },
+    { label:'📱 Communication',        items:['Recharge (Phone & Wifi)','Other Bills (Insurance/DTH)'] },
+    { label:'🎭 Entertainment',        items:['Movie/Entertainment','Outing/Travel for Experience'] },
+    { label:'🛍️ Shopping',             items:['Shopping (Dress/Gifts)','Shopping for Home','Shopping for Family'] },
+    { label:'📦 Other',               items:['Extras'] }
+  ],
+  INVESTMENT: [
+    { label:'📈 Investments', items:['Gold and Silver','SBI Life Insurance','Recurring Deposit (RD)','PPF','Stocks','SBI Jai Nivesh (SIP)','Parag Flexi Cap SIP','Large Cap Fund SIP','Bond Investment (RBI + Corporate)','NPS'] },
+    { label:'👨‍👩‍👧 Sharing',     items:['Sharing - To Family Member','Sharing - To Family','Sharing - To Relatives'] }
+  ],
+  INTEREST: [
+    { label:'💰 Income & Returns', items:['From Parents/Relatives','Waste Plastic','Sell Product/Coupons','Gas Subsidy','Indian Bank Interest','SBI Interest','ICICI Interest','Post Office Interest','Dividend','Bond Interest','FD/RD Interest','Cashback'] }
+  ],
+  LOAN: [
+    { label:'🏦 Loan Repayments', items:['Gold Loan','Personal Loan','Other Loan'] }
+  ]
 };
 
-// ─── STATE ──────────────────────────────────────────────────────────────────
+// ─── STATE ────────────────────────────────────────────────────────────────────
 let currentYear = new Date().getFullYear();
 let summaryData = {};
-let matrixCache = {};
 let chartInstances = {};
+let customCategories = { SPENDING:[], INVESTMENT:[], INTEREST:[], LOAN:[] };
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 async function init() {
   await loadYears();
   await refreshAll();
 }
 
-async function loadYears() {
+async function loadYears(selectYear) {
   const years = await api('/api/financial/years');
   const sel = document.getElementById('yearSelector');
+  const prev = selectYear || currentYear;
   sel.innerHTML = '';
-  const fy = [currentYear];
-  const merged = [...new Set([...fy, ...years])].sort((a,b) => b-a);
-  merged.forEach(y => {
+  years.forEach(y => {
     const opt = document.createElement('option');
     opt.value = y; opt.textContent = y;
-    if (y === currentYear) opt.selected = true;
+    if (y === prev) opt.selected = true;
     sel.appendChild(opt);
   });
+  currentYear = parseInt(sel.value);
 }
 
 async function onYearChange(y) {
   currentYear = parseInt(y);
-  matrixCache = {};
   await refreshAll();
 }
 
 async function refreshAll() {
-  summaryData = await api('/api/financial/summary?year=' + currentYear);
+  [summaryData] = await Promise.all([
+    api('/api/financial/summary?year=' + currentYear)
+  ]);
+  // Load custom cats for all types in parallel
+  const [cs, ci, cint, cl] = await Promise.all([
+    api('/api/categories?type=SPENDING'),
+    api('/api/categories?type=INVESTMENT'),
+    api('/api/categories?type=INTEREST'),
+    api('/api/categories?type=LOAN')
+  ]);
+  customCategories = { SPENDING: cs, INVESTMENT: ci, INTEREST: cint, LOAN: cl };
+
   updateKPIs();
   renderDashboardCharts();
-  renderTable('SPENDING','spending-table-wrap');
-  renderTable('INVESTMENT','investment-table-wrap');
-  renderTable('INTEREST','interest-table-wrap');
-  renderTable('LOAN','loan-table-wrap');
+  await Promise.all([
+    renderTable('SPENDING','spending-table-wrap'),
+    renderTable('INVESTMENT','investment-table-wrap'),
+    renderTable('INTEREST','interest-table-wrap'),
+    renderTable('LOAN','loan-table-wrap')
+  ]);
   renderAnalysis();
 }
 
-// ─── FORMAT ──────────────────────────────────────────────────────────────────
-function fmt(n) {
-  if (!n) return '—';
-  return '₹' + Math.round(n).toLocaleString('en-IN');
+// ─── YEAR MANAGEMENT ──────────────────────────────────────────────────────────
+function showAddYearModal() {
+  document.getElementById('newYearInput').value = '';
+  document.getElementById('yearModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('newYearInput').focus(), 100);
 }
-function fmtNum(n) {
-  if (!n || n === 0) return '';
-  return Math.round(n).toLocaleString('en-IN');
+function closeYearModal() {
+  document.getElementById('yearModal').style.display = 'none';
 }
-function fmtVal(n) {
-  if (!n || n === 0) return '0';
-  return n.toLocaleString('en-IN', {maximumFractionDigits: 0});
+async function confirmAddYear() {
+  const val = parseInt(document.getElementById('newYearInput').value);
+  if (!val || val < 2000 || val > 2099) {
+    document.getElementById('newYearInput').style.borderColor = 'var(--red)';
+    return;
+  }
+  closeYearModal();
+  await loadYears(val);
+  // Manually update selector
+  const sel = document.getElementById('yearSelector');
+  let found = false;
+  for (let o of sel.options) { if (parseInt(o.value) === val) { o.selected = true; found = true; break; } }
+  if (!found) {
+    const opt = document.createElement('option');
+    opt.value = val; opt.textContent = val; opt.selected = true;
+    // Insert sorted
+    let inserted = false;
+    for (let i = 0; i < sel.options.length; i++) {
+      if (parseInt(sel.options[i].value) < val) { sel.insertBefore(opt, sel.options[i]); inserted = true; break; }
+    }
+    if (!inserted) sel.appendChild(opt);
+  }
+  currentYear = val;
+  await refreshAll();
 }
+
+// ─── FORMAT ───────────────────────────────────────────────────────────────────
+function fmt(n) { return n ? '₹' + Math.round(n).toLocaleString('en-IN') : '—'; }
+function fmtVal(n) { return n ? n.toLocaleString('en-IN', {maximumFractionDigits:0}) : ''; }
 
 // ─── KPIs ─────────────────────────────────────────────────────────────────────
 function updateKPIs() {
-  const { totalSpending, totalInvestment, totalIncome, monthlySpending, monthlyInvestment, monthlyIncome } = summaryData;
-  const months = MONTHS.filter((_,i) => (monthlySpending[i]||0)+(monthlyInvestment[i]||0)+(monthlyIncome[i]||0) > 0).length || 12;
-
+  const {totalSpending,totalInvestment,totalIncome,monthlySpending,monthlyInvestment,monthlyIncome} = summaryData;
+  const months = MONTHS.filter((_,i)=>(monthlySpending[i]||0)+(monthlyInvestment[i]||0)+(monthlyIncome[i]||0)>0).length||12;
   document.getElementById('kpi-spending').textContent = fmt(totalSpending);
-  document.getElementById('kpi-spending-sub').textContent = 'Monthly avg: ' + fmt(totalSpending/months);
+  document.getElementById('kpi-spending-sub').textContent = 'Monthly avg: '+fmt(totalSpending/months);
   document.getElementById('kpi-investment').textContent = fmt(totalInvestment);
-  document.getElementById('kpi-investment-sub').textContent = 'Monthly avg: ' + fmt(totalInvestment/months);
+  document.getElementById('kpi-investment-sub').textContent = 'Monthly avg: '+fmt(totalInvestment/months);
   document.getElementById('kpi-income').textContent = fmt(totalIncome);
-  document.getElementById('kpi-income-sub').textContent = 'Monthly avg: ' + fmt(totalIncome/months);
-  const net = (totalSpending||0) + (totalInvestment||0) - (totalIncome||0);
-  document.getElementById('kpi-net').textContent = fmt(net);
+  document.getElementById('kpi-income-sub').textContent = 'Monthly avg: '+fmt(totalIncome/months);
+  document.getElementById('kpi-net').textContent = fmt((totalSpending||0)+(totalInvestment||0)-(totalIncome||0));
 }
 
-// ─── DASHBOARD CHARTS ────────────────────────────────────────────────────────
+// ─── DASHBOARD CHARTS ─────────────────────────────────────────────────────────
 function renderDashboardCharts() {
-  const { monthlySpending, monthlyInvestment, monthlyIncome, spendingByCategory, investmentByCategory } = summaryData;
-
+  const {monthlySpending,monthlyInvestment,monthlyIncome,spendingByCategory,investmentByCategory,totalSpending,totalInvestment,totalIncome} = summaryData;
   destroyChart('chartTrend');
-  chartInstances['chartTrend'] = new Chart(document.getElementById('chartTrend'), {
-    type: 'bar',
-    data: {
-      labels: MONTHS,
-      datasets: [
-        { label: 'Spending', data: monthlySpending, backgroundColor: 'rgba(240,79,88,.75)', borderRadius: 4 },
-        { label: 'Investment', data: monthlyInvestment, backgroundColor: 'rgba(16,212,142,.75)', borderRadius: 4 },
-        { label: 'Income', data: monthlyIncome, backgroundColor: 'rgba(59,158,255,.75)', borderRadius: 4 }
-      ]
-    },
-    options: { ...chartOpts(), scales: { x: { ...xAxisOpts(), stacked: false }, y: { ...yAxisOpts() } } }
+  chartInstances.chartTrend = new Chart(document.getElementById('chartTrend'),{
+    type:'bar', data:{ labels:MONTHS, datasets:[
+      {label:'Spending',data:monthlySpending,backgroundColor:'rgba(240,79,88,.75)',borderRadius:4},
+      {label:'Investment',data:monthlyInvestment,backgroundColor:'rgba(16,212,142,.75)',borderRadius:4},
+      {label:'Income',data:monthlyIncome,backgroundColor:'rgba(59,158,255,.75)',borderRadius:4}
+    ]}, options:{...cOpts(),scales:{x:{...xAx()},y:{...yAx()}}}
   });
-
-  const totalS = (summaryData.totalSpending||0), totalI = (summaryData.totalInvestment||0), totalInc = (summaryData.totalIncome||0);
   destroyChart('chartPortfolio');
-  chartInstances['chartPortfolio'] = new Chart(document.getElementById('chartPortfolio'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Spending','Investment','Income'],
-      datasets: [{ data: [totalS, totalI, totalInc], backgroundColor: ['rgba(240,79,88,.85)','rgba(16,212,142,.85)','rgba(59,158,255,.85)'], borderWidth: 0, hoverOffset: 8 }]
-    },
-    options: { ...doughnutOpts() }
+  chartInstances.chartPortfolio = new Chart(document.getElementById('chartPortfolio'),{
+    type:'doughnut', data:{ labels:['Spending','Investment','Income'],
+      datasets:[{data:[totalSpending,totalInvestment,totalIncome],backgroundColor:['rgba(240,79,88,.85)','rgba(16,212,142,.85)','rgba(59,158,255,.85)'],borderWidth:0,hoverOffset:8}]
+    }, options:dOpts()
   });
-
-  const spendEntries = Object.entries(spendingByCategory||{}).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const spendE = Object.entries(spendingByCategory||{}).sort((a,b)=>b[1]-a[1]).slice(0,10);
   destroyChart('chartSpendCat');
-  chartInstances['chartSpendCat'] = new Chart(document.getElementById('chartSpendCat'), {
-    type: 'bar',
-    data: {
-      labels: spendEntries.map(e=>e[0]),
-      datasets: [{ label: 'Amount', data: spendEntries.map(e=>e[1]), backgroundColor: spendEntries.map((_,i) => `hsl(${350+i*5},80%,${55+i*2}%)`), borderRadius: 4 }]
-    },
-    options: { ...chartOpts(), indexAxis: 'y', scales: { x: { ...yAxisOpts() }, y: { ...xAxisOpts() } } }
+  chartInstances.chartSpendCat = new Chart(document.getElementById('chartSpendCat'),{
+    type:'bar', data:{ labels:spendE.map(e=>e[0]), datasets:[{label:'Amount',data:spendE.map(e=>e[1]),backgroundColor:spendE.map((_,i)=>`hsl(${350+i*5},80%,${55+i*2}%)`),borderRadius:4}]
+    }, options:{...cOpts(),indexAxis:'y',scales:{x:{...yAx()},y:{...xAx()}}}
   });
-
-  const invEntries = Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
+  const invE = Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
   destroyChart('chartInvCat');
-  chartInstances['chartInvCat'] = new Chart(document.getElementById('chartInvCat'), {
-    type: 'doughnut',
-    data: {
-      labels: invEntries.map(e=>e[0]),
-      datasets: [{ data: invEntries.map(e=>e[1]), backgroundColor: invEntries.map((_,i) => `hsl(${140+i*18},65%,${45+i*3}%)`), borderWidth: 0, hoverOffset: 8 }]
-    },
-    options: { ...doughnutOpts() }
+  chartInstances.chartInvCat = new Chart(document.getElementById('chartInvCat'),{
+    type:'doughnut', data:{ labels:invE.map(e=>e[0]), datasets:[{data:invE.map(e=>e[1]),backgroundColor:invE.map((_,i)=>`hsl(${140+i*18},65%,${45+i*3}%)`),borderWidth:0,hoverOffset:8}]
+    }, options:dOpts()
   });
 }
 
-// ─── ANALYSIS CHARTS ────────────────────────────────────────────────────────
+// ─── ANALYSIS ─────────────────────────────────────────────────────────────────
 function renderAnalysis() {
-  const { monthlySpending, monthlyInvestment, monthlyIncome, spendingByCategory, investmentByCategory } = summaryData;
-
+  const {monthlySpending,monthlyInvestment,monthlyIncome,spendingByCategory,investmentByCategory} = summaryData;
   destroyChart('chartAnalysisFlow');
-  chartInstances['chartAnalysisFlow'] = new Chart(document.getElementById('chartAnalysisFlow'), {
-    type: 'line',
-    data: {
-      labels: MONTHS,
-      datasets: [
-        { label: 'Spending', data: monthlySpending, borderColor: 'var(--red)', backgroundColor: 'rgba(240,79,88,.1)', fill: true, tension: .35, pointRadius: 4 },
-        { label: 'Investment', data: monthlyInvestment, borderColor: 'var(--green)', backgroundColor: 'rgba(16,212,142,.1)', fill: true, tension: .35, pointRadius: 4 },
-        { label: 'Income', data: monthlyIncome, borderColor: 'var(--blue)', backgroundColor: 'rgba(59,158,255,.1)', fill: true, tension: .35, pointRadius: 4 }
-      ]
-    },
-    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts() } } }
+  chartInstances.chartAnalysisFlow = new Chart(document.getElementById('chartAnalysisFlow'),{
+    type:'line', data:{ labels:MONTHS, datasets:[
+      {label:'Spending',data:monthlySpending,borderColor:'var(--red)',backgroundColor:'rgba(240,79,88,.1)',fill:true,tension:.35,pointRadius:4},
+      {label:'Investment',data:monthlyInvestment,borderColor:'var(--green)',backgroundColor:'rgba(16,212,142,.1)',fill:true,tension:.35,pointRadius:4},
+      {label:'Income',data:monthlyIncome,borderColor:'var(--blue)',backgroundColor:'rgba(59,158,255,.1)',fill:true,tension:.35,pointRadius:4}
+    ]}, options:{...cOpts(),scales:{x:{...xAx()},y:{...yAx()}}}
   });
-
-  const cumSpend = [], cumInv = [];
-  let cs = 0, ci = 0;
-  monthlySpending.forEach((v,i) => { cs += v||0; ci += monthlyInvestment[i]||0; cumSpend.push(cs); cumInv.push(ci); });
+  let cs=0,ci=0; const cumS=[],cumI=[];
+  monthlySpending.forEach((v,i)=>{cs+=v||0;ci+=monthlyInvestment[i]||0;cumS.push(cs);cumI.push(ci);});
   destroyChart('chartCumulative');
-  chartInstances['chartCumulative'] = new Chart(document.getElementById('chartCumulative'), {
-    type: 'line',
-    data: {
-      labels: MONTHS,
-      datasets: [
-        { label: 'Cumulative Spending', data: cumSpend, borderColor: 'var(--red)', fill: false, tension: .3, pointRadius: 3 },
-        { label: 'Cumulative Investment', data: cumInv, borderColor: 'var(--green)', fill: false, tension: .3, pointRadius: 3 }
-      ]
-    },
-    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts() } } }
+  chartInstances.chartCumulative = new Chart(document.getElementById('chartCumulative'),{
+    type:'line', data:{ labels:MONTHS, datasets:[
+      {label:'Cumul. Spending',data:cumS,borderColor:'var(--red)',fill:false,tension:.3,pointRadius:3},
+      {label:'Cumul. Investment',data:cumI,borderColor:'var(--green)',fill:false,tension:.3,pointRadius:3}
+    ]}, options:{...cOpts(),scales:{x:{...xAx()},y:{...yAx()}}}
   });
-
-  const savingsRate = monthlySpending.map((s,i) => {
-    const inc = monthlyIncome[i]||0, inv = monthlyInvestment[i]||0, sp = s||0;
-    const total = sp + inv;
-    return total > 0 ? Math.round((inc / total) * 100) : 0;
-  });
+  const rates = monthlySpending.map((s,i)=>{const t=(s||0)+(monthlyInvestment[i]||0);return t>0?Math.round(((monthlyIncome[i]||0)/t)*100):0;});
   destroyChart('chartSavingsRate');
-  chartInstances['chartSavingsRate'] = new Chart(document.getElementById('chartSavingsRate'), {
-    type: 'bar',
-    data: {
-      labels: MONTHS,
-      datasets: [{ label: 'Income/Outflow %', data: savingsRate, backgroundColor: savingsRate.map(v => v >= 20 ? 'rgba(16,212,142,.75)' : 'rgba(240,180,41,.75)'), borderRadius: 4 }]
-    },
-    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts(), max: 100 } } }
+  chartInstances.chartSavingsRate = new Chart(document.getElementById('chartSavingsRate'),{
+    type:'bar', data:{ labels:MONTHS, datasets:[{label:'Income/Outflow %',data:rates,backgroundColor:rates.map(v=>v>=20?'rgba(16,212,142,.75)':'rgba(240,180,41,.75)'),borderRadius:4}]
+    }, options:{...cOpts(),scales:{x:{...xAx()},y:{...yAx(),max:100}}}
   });
-
-  const spendEntries2 = Object.entries(spendingByCategory||{}).filter(e=>e[1]>0);
+  const spE2=Object.entries(spendingByCategory||{}).filter(e=>e[1]>0);
   destroyChart('chartAnalysisSpend');
-  chartInstances['chartAnalysisSpend'] = new Chart(document.getElementById('chartAnalysisSpend'), {
-    type: 'pie',
-    data: {
-      labels: spendEntries2.map(e=>e[0]),
-      datasets: [{ data: spendEntries2.map(e=>e[1]), backgroundColor: spendEntries2.map((_,i) => `hsl(${350+i*13},75%,${52+i*2}%)`), borderWidth: 0 }]
-    },
-    options: { ...doughnutOpts() }
+  chartInstances.chartAnalysisSpend = new Chart(document.getElementById('chartAnalysisSpend'),{
+    type:'pie', data:{ labels:spE2.map(e=>e[0]), datasets:[{data:spE2.map(e=>e[1]),backgroundColor:spE2.map((_,i)=>`hsl(${350+i*13},75%,${52+i*2}%)`),borderWidth:0}]
+    }, options:dOpts()
   });
-
-  const invEntries2 = Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
+  const invE2=Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
   destroyChart('chartAnalysisInv');
-  chartInstances['chartAnalysisInv'] = new Chart(document.getElementById('chartAnalysisInv'), {
-    type: 'pie',
-    data: {
-      labels: invEntries2.map(e=>e[0]),
-      datasets: [{ data: invEntries2.map(e=>e[1]), backgroundColor: invEntries2.map((_,i) => `hsl(${140+i*20},65%,${45+i*3}%)`), borderWidth: 0 }]
-    },
-    options: { ...doughnutOpts() }
+  chartInstances.chartAnalysisInv = new Chart(document.getElementById('chartAnalysisInv'),{
+    type:'pie', data:{ labels:invE2.map(e=>e[0]), datasets:[{data:invE2.map(e=>e[1]),backgroundColor:invE2.map((_,i)=>`hsl(${140+i*20},65%,${45+i*3}%)`),borderWidth:0}]
+    }, options:dOpts()
   });
-
   // Summary table
   const wrap = document.getElementById('analysisSummaryTable');
-  let html = '<table class="summary-table"><thead><tr><th>Month</th><th class="val">Spending (₹)</th><th class="val">Investment (₹)</th><th class="val">Income (₹)</th><th class="val">Net Outflow (₹)</th></tr></thead><tbody>';
+  let html='<table class="summary-table"><thead><tr><th>Month</th><th class="val">Spending (₹)</th><th class="val">Investment (₹)</th><th class="val">Income (₹)</th><th class="val">Net Outflow (₹)</th></tr></thead><tbody>';
   let ts=0,ti=0,tinc=0;
-  MONTHS.forEach((m,i) => {
-    const s=monthlySpending[i]||0, inv=monthlyInvestment[i]||0, inc=monthlyIncome[i]||0;
-    const net = s+inv-inc;
-    ts+=s; ti+=inv; tinc+=inc;
-    if (s+inv+inc === 0) return;
-    html += `<tr><td>${m} ${currentYear}</td><td class="val" style="color:var(--red)">${fmt(s)}</td><td class="val" style="color:var(--green)">${fmt(inv)}</td><td class="val" style="color:var(--blue)">${fmt(inc)}</td><td class="val" style="color:var(--gold)">${fmt(net)}</td></tr>`;
+  MONTHS.forEach((m,i)=>{
+    const s=monthlySpending[i]||0,inv=monthlyInvestment[i]||0,inc=monthlyIncome[i]||0;
+    if(s+inv+inc===0)return;
+    ts+=s;ti+=inv;tinc+=inc;
+    html+=`<tr><td>${m} ${currentYear}</td><td class="val" style="color:var(--red)">${fmt(s)}</td><td class="val" style="color:var(--green)">${fmt(inv)}</td><td class="val" style="color:var(--blue)">${fmt(inc)}</td><td class="val" style="color:var(--gold)">${fmt(s+inv-inc)}</td></tr>`;
   });
-  html += `<tr style="font-weight:700;border-top:2px solid var(--border2)"><td>Total</td><td class="val" style="color:var(--red)">${fmt(ts)}</td><td class="val" style="color:var(--green)">${fmt(ti)}</td><td class="val" style="color:var(--blue)">${fmt(tinc)}</td><td class="val" style="color:var(--gold)">${fmt(ts+ti-tinc)}</td></tr>`;
-  html += '</tbody></table>';
-  wrap.innerHTML = html;
+  html+=`<tr style="font-weight:700;border-top:2px solid var(--border2)"><td>TOTAL</td><td class="val" style="color:var(--red)">${fmt(ts)}</td><td class="val" style="color:var(--green)">${fmt(ti)}</td><td class="val" style="color:var(--blue)">${fmt(tinc)}</td><td class="val" style="color:var(--gold)">${fmt(ts+ti-tinc)}</td></tr>`;
+  html+='</tbody></table>';
+  wrap.innerHTML=html;
 }
 
-// ─── TABLE RENDERING ─────────────────────────────────────────────────────────
+// ─── TABLE RENDERING ──────────────────────────────────────────────────────────
 async function renderTable(type, wrapperId) {
-  const matrixResp = await api('/api/financial/matrix?year=' + currentYear + '&type=' + type);
+  const matrixResp = await api('/api/financial/matrix?year='+currentYear+'&type='+type);
   const data = matrixResp.data || {};
   const wrapper = document.getElementById(wrapperId);
-  const config = CATEGORIES[type];
+  const defaultGroups = DEFAULT_GROUPS[type];
+  const custom = customCategories[type] || [];
 
-  let html = '<table class="fin-table"><thead><tr>';
-  html += '<th>Category</th>';
-  MONTHS.forEach(m => html += `<th class="month-col">${m}</th>`);
-  html += '<th class="th-total">Total</th><th class="th-avg">Avg/Mo</th></tr></thead><tbody>';
+  // Collect all default categories to exclude from custom section duplicates
+  const defaultSet = new Set(defaultGroups.flatMap(g=>g.items));
 
-  config.groups.forEach((group, gi) => {
-    // Group header
-    html += `<tr class="group-row"><td colspan="15">${group.label}</td></tr>`;
+  let html = buildTableHeader();
 
-    let groupTotals = new Array(12).fill(0);
+  // All default category rows = grand total denominator
+  let grandTotals = new Array(12).fill(0);
+
+  // ── Default groups ──
+  defaultGroups.forEach(group => {
+    html += `<tr class="group-row"><td colspan="15" style="padding-left:14px">${group.label}</td></tr>`;
+    let gTotals = new Array(12).fill(0);
     group.items.forEach(cat => {
       const amounts = data[cat] || new Array(12).fill(0);
-      const rowTotal = amounts.reduce((a,b) => a+(b||0), 0);
-      amounts.forEach((v,i) => groupTotals[i] += (v||0));
-
-      html += `<tr>`;
-      html += `<td><div class="cat-cell"><i class="bi bi-dash"></i>${cat}</div></td>`;
-      MONTHS.forEach((_, mi) => {
-        const v = amounts[mi] || 0;
-        html += `<td class="num-cell ${v>0?'has-value':'zero'}" data-type="${type}" data-cat="${escAttr(cat)}" data-month="${mi+1}" onclick="editCell(this)">`;
-        html += v > 0 ? fmtVal(v) : '';
-        html += '</td>';
-      });
-      html += `<td class="total-cell">${rowTotal > 0 ? fmtVal(rowTotal) : ''}</td>`;
-      html += `<td class="avg-cell">${rowTotal > 0 ? fmtVal(rowTotal/12) : ''}</td>`;
-      html += '</tr>';
+      amounts.forEach((v,i)=>{ gTotals[i]+=(v||0); grandTotals[i]+=(v||0); });
+      html += categoryRow(cat, amounts, type, false);
     });
-
-    // Group total row
-    const groupTotal = groupTotals.reduce((a,b)=>a+b,0);
-    if (groupTotal > 0) {
-      html += '<tr class="total-row">';
-      html += `<td><div class="cat-cell"><b>Subtotal</b></div></td>`;
-      groupTotals.forEach(v => html += `<td class="num-cell">${v>0?fmtVal(v):''}</td>`);
-      html += `<td class="total-cell">${fmtVal(groupTotal)}</td>`;
-      html += `<td class="avg-cell">${fmtVal(groupTotal/12)}</td>`;
-      html += '</tr>';
-    }
+    const gTotal = gTotals.reduce((a,b)=>a+b,0);
+    if (gTotal > 0) html += subtotalRow(gTotals);
   });
 
-  // Grand total
-  const allAmounts = config.groups.flatMap(g => g.items).map(cat => (data[cat] || new Array(12).fill(0)));
-  const grandTotals = new Array(12).fill(0);
-  allAmounts.forEach(arr => arr.forEach((v,i) => grandTotals[i] += (v||0)));
-  const grandTotal = grandTotals.reduce((a,b)=>a+b,0);
+  // ── Custom categories ──
+  if (custom.length > 0) {
+    html += `<tr class="group-row custom-group"><td colspan="15" style="padding-left:14px">✨ Custom Fields</td></tr>`;
+    custom.forEach(cc => {
+      const amounts = data[cc.name] || new Array(12).fill(0);
+      amounts.forEach((v,i)=>{ grandTotals[i]+=(v||0); });
+      html += categoryRow(cc.name, amounts, type, true, cc.id);
+    });
+  }
 
-  html += '<tr class="total-row" style="border-top:2px solid var(--green);opacity:.9">';
-  html += '<td><div class="cat-cell"><b style="color:var(--green)">GRAND TOTAL</b></div></td>';
-  grandTotals.forEach(v => html += `<td class="num-cell">${v>0?fmtVal(v):''}</td>`);
+  // ── Add Row button ──
+  html += `<tr class="add-row"><td colspan="15"><button class="btn-add-row" onclick="showAddRow('${type}','${wrapperId}',this)"><i class="bi bi-plus-circle"></i> Add Custom Row</button></td></tr>`;
+
+  // ── Grand Total ──
+  const grandTotal = grandTotals.reduce((a,b)=>a+b,0);
+  html += `<tr class="total-row grand-total-row">`;
+  html += `<td><div class="cat-cell"><b style="color:var(--green)">GRAND TOTAL</b></div></td>`;
+  grandTotals.forEach(v => html += `<td class="num-cell" style="cursor:default">${v>0?fmtVal(v):''}</td>`);
   html += `<td class="total-cell" style="font-size:14px">${fmtVal(grandTotal)}</td>`;
   html += `<td class="avg-cell">${fmtVal(grandTotal/12)}</td>`;
-  html += '</tr>';
+  html += `<td class="action-cell"></td></tr>`;
 
   html += '</tbody></table>';
   wrapper.innerHTML = html;
 }
 
-// ─── CELL EDITING ────────────────────────────────────────────────────────────
-function escAttr(s) { return s.replace(/"/g,'&quot;'); }
+function buildTableHeader() {
+  let h = '<table class="fin-table"><thead><tr>';
+  h += '<th>Category</th>';
+  MONTHS.forEach(m => h += `<th class="month-col">${m}</th>`);
+  h += '<th class="th-total" style="color:var(--green)">Total</th><th>Avg/Mo</th><th class="th-actions"></th>';
+  h += '</tr></thead><tbody>';
+  return h;
+}
 
+function categoryRow(cat, amounts, type, isCustom, customId) {
+  const rowTotal = amounts.reduce((a,b)=>a+(b||0),0);
+  const catClass = isCustom ? 'cat-cell custom-cat' : 'cat-cell';
+  const icon = isCustom ? 'bi-stars' : 'bi-dash';
+  let h = '<tr>';
+  h += `<td><div class="${catClass}"><i class="icon bi ${icon}"></i>${escHtml(cat)}</div></td>`;
+  MONTHS.forEach((_,mi) => {
+    const v = amounts[mi]||0;
+    h += `<td class="num-cell ${v>0?'has-value':'zero'}" data-type="${type}" data-cat="${escAttr(cat)}" data-month="${mi+1}" onclick="editCell(this)">`;
+    h += v > 0 ? fmtVal(v) : '';
+    h += '</td>';
+  });
+  h += `<td class="total-cell">${rowTotal>0?fmtVal(rowTotal):''}</td>`;
+  h += `<td class="avg-cell">${rowTotal>0?fmtVal(rowTotal/12):''}</td>`;
+  if (isCustom && customId) {
+    h += `<td class="action-cell"><button class="btn-del-row" title="Remove this row" onclick="deleteCustomRow('${customId}','${type}')"><i class="bi bi-trash3"></i></button></td>`;
+  } else {
+    h += `<td class="action-cell"></td>`;
+  }
+  h += '</tr>';
+  return h;
+}
+
+function subtotalRow(totals) {
+  const total = totals.reduce((a,b)=>a+b,0);
+  if (total === 0) return '';
+  let h = '<tr class="total-row">';
+  h += '<td><div class="cat-cell"><b>Subtotal</b></div></td>';
+  totals.forEach(v => h += `<td class="num-cell">${v>0?fmtVal(v):''}</td>`);
+  h += `<td class="total-cell">${fmtVal(total)}</td>`;
+  h += `<td class="avg-cell">${fmtVal(total/12)}</td>`;
+  h += '<td class="action-cell"></td></tr>';
+  return h;
+}
+
+// ─── ADD CUSTOM ROW ───────────────────────────────────────────────────────────
+function showAddRow(type, wrapperId, btn) {
+  const table = btn.closest('table');
+  const addTr = btn.closest('tr');
+
+  // Create inline input row before the button row
+  const inputRow = document.createElement('tr');
+  inputRow.className = 'add-input-row';
+  inputRow.innerHTML = `
+    <td colspan="13" style="padding:10px 14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <input class="add-cat-input" id="newCatInput_${type}" placeholder="Enter category name (e.g. Skill Training, Crypto, Freelance...)" autofocus>
+        <button class="btn-confirm-add" onclick="confirmAddRow('${type}','${wrapperId}')"><i class="bi bi-check-lg"></i> Add</button>
+        <button class="btn-cancel-add" onclick="cancelAddRow('${type}')"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </td>
+    <td colspan="2"></td>
+  `;
+  addTr.parentNode.insertBefore(inputRow, addTr);
+
+  const inp = inputRow.querySelector(`#newCatInput_${type}`);
+  inp.focus();
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmAddRow(type, wrapperId);
+    if (e.key === 'Escape') cancelAddRow(type);
+  });
+
+  // Hide button temporarily
+  btn.style.display = 'none';
+  btn.dataset.hidden = '1';
+}
+
+function cancelAddRow(type) {
+  const row = document.querySelector(`.add-input-row`);
+  if (row) {
+    // Show button again
+    const btn = document.querySelector('.btn-add-row');
+    if (btn) btn.style.display = '';
+    row.remove();
+  }
+}
+
+async function confirmAddRow(type, wrapperId) {
+  const inp = document.getElementById(`newCatInput_${type}`);
+  if (!inp) return;
+  const name = inp.value.trim();
+  if (!name) { inp.style.borderColor='var(--red)'; inp.focus(); return; }
+
+  try {
+    const result = await api('/api/categories', 'POST', { type, name });
+    customCategories[type].push(result);
+    await renderTable(type, wrapperId);
+    showSaved();
+    // Trigger KPI/summary refresh
+    summaryData = await api('/api/financial/summary?year='+currentYear);
+    updateKPIs();
+  } catch(e) {
+    if (e.message.includes('409')) {
+      inp.style.borderColor='var(--red)';
+      inp.placeholder='This category already exists!';
+    } else {
+      alert('Error adding category: ' + e.message);
+    }
+  }
+}
+
+async function deleteCustomRow(id, type) {
+  if (!confirm('Remove this custom row? The data values are also deleted.')) return;
+  await api('/api/categories/'+id, 'DELETE');
+  customCategories[type] = customCategories[type].filter(c => c.id !== id);
+  const wrapperId = { SPENDING:'spending-table-wrap', INVESTMENT:'investment-table-wrap', INTEREST:'interest-table-wrap', LOAN:'loan-table-wrap' }[type];
+  await renderTable(type, wrapperId);
+  showSaved();
+}
+
+// ─── CELL EDITING ─────────────────────────────────────────────────────────────
 function editCell(td) {
   if (td.classList.contains('editing')) return;
   td.classList.add('editing');
-  const type = td.dataset.type;
-  const cat = td.dataset.cat;
-  const month = parseInt(td.dataset.month);
-  const current = td.textContent.replace(/,/g,'').trim() || '0';
-
+  const type = td.dataset.type, cat = td.dataset.cat, month = parseInt(td.dataset.month);
+  const current = td.textContent.replace(/,/g,'').trim()||'0';
   td.innerHTML = `<input type="number" step="0.01" value="${current==='0'?'':current}" placeholder="0" autofocus>`;
   const inp = td.querySelector('input');
-  inp.focus();
-  inp.select();
+  inp.focus(); inp.select();
 
   const save = async () => {
-    const val = parseFloat(inp.value) || 0;
+    const val = parseFloat(inp.value)||0;
     td.classList.remove('editing');
-    td.textContent = val > 0 ? fmtVal(val) : '';
+    td.textContent = val>0 ? fmtVal(val) : '';
     td.className = `num-cell ${val>0?'has-value':'zero'}`;
-    td.dataset.type = type; td.dataset.cat = cat; td.dataset.month = month;
-    td.onclick = () => editCell(td);
+    td.dataset.type=type; td.dataset.cat=cat; td.dataset.month=month;
+    td.onclick = ()=>editCell(td);
     await saveEntry(currentYear, month, type, cat, val);
     updateRowTotals(td);
   };
-
   inp.addEventListener('blur', save);
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { inp.blur(); }
-    if (e.key === 'Escape') {
+  inp.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){inp.blur();}
+    if(e.key==='Escape'){
       td.classList.remove('editing');
-      td.textContent = current !== '0' ? fmtVal(parseFloat(current)) : '';
-      td.className = `num-cell ${current!=='0'?'has-value':'zero'}`;
-      td.dataset.type = type; td.dataset.cat = cat; td.dataset.month = month;
-      td.onclick = () => editCell(td);
+      td.textContent = current!=='0'?fmtVal(parseFloat(current)):'';
+      td.className=`num-cell ${current!=='0'?'has-value':'zero'}`;
+      td.dataset.type=type;td.dataset.cat=cat;td.dataset.month=month;
+      td.onclick=()=>editCell(td);
     }
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      inp.blur();
-      const all = Array.from(td.closest('tbody').querySelectorAll('.num-cell:not(.total-row .num-cell)'));
-      const idx = all.indexOf(td);
-      if (idx >= 0 && idx < all.length - 1) setTimeout(() => all[idx+1].click(), 50);
+    if(e.key==='Tab'){
+      e.preventDefault(); inp.blur();
+      const all=Array.from(td.closest('tbody').querySelectorAll('.num-cell[data-month]:not(.total-row .num-cell):not(.grand-total-row .num-cell)'));
+      const idx=all.indexOf(td);
+      if(idx>=0&&idx<all.length-1)setTimeout(()=>all[idx+1].click(),50);
     }
   });
 }
@@ -672,76 +761,59 @@ function editCell(td) {
 function updateRowTotals(td) {
   const row = td.closest('tr');
   const cells = Array.from(row.querySelectorAll('.num-cell[data-month]'));
-  const total = cells.reduce((s, c) => {
-    const v = parseFloat(c.textContent.replace(/,/g,'')) || 0;
-    return s + v;
-  }, 0);
-  const totalCell = row.querySelector('.total-cell');
-  const avgCell = row.querySelector('.avg-cell');
-  if (totalCell) totalCell.textContent = total > 0 ? fmtVal(total) : '';
-  if (avgCell) avgCell.textContent = total > 0 ? fmtVal(total/12) : '';
-
-  // Refresh KPIs and charts after a short delay
+  const total = cells.reduce((s,c)=>s+(parseFloat(c.textContent.replace(/,/g,''))||0),0);
+  const tc=row.querySelector('.total-cell'), ac=row.querySelector('.avg-cell');
+  if(tc)tc.textContent=total>0?fmtVal(total):'';
+  if(ac)ac.textContent=total>0?fmtVal(total/12):'';
   clearTimeout(window._refreshTimer);
-  window._refreshTimer = setTimeout(async () => {
-    summaryData = await api('/api/financial/summary?year=' + currentYear);
-    updateKPIs();
-    renderDashboardCharts();
-  }, 1500);
+  window._refreshTimer=setTimeout(async()=>{
+    summaryData=await api('/api/financial/summary?year='+currentYear);
+    updateKPIs(); renderDashboardCharts();
+  },1500);
 }
 
-// ─── SAVE ENTRY ──────────────────────────────────────────────────────────────
-async function saveEntry(year, month, type, category, amount) {
-  await api('/api/financial/entry', 'POST', { year, month, type, category, amount });
+async function saveEntry(year,month,type,category,amount) {
+  await api('/api/financial/entry','POST',{year,month,type,category,amount});
   showSaved();
 }
 
 function showSaved() {
-  const el = document.getElementById('saveIndicator');
+  const el=document.getElementById('saveIndicator');
   el.classList.add('show');
   clearTimeout(window._saveTimer);
-  window._saveTimer = setTimeout(() => el.classList.remove('show'), 2000);
+  window._saveTimer=setTimeout(()=>el.classList.remove('show'),2000);
 }
 
-// ─── EXPORT ──────────────────────────────────────────────────────────────────
-function exportExcel() {
-  window.location.href = '/export/excel?year=' + currentYear;
-}
+function exportExcel() { window.location.href='/export/excel?year='+currentYear; }
 
-// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
-function showTab(name, el) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tabnav-item').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
+function showTab(name,el) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabnav-item').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
   el.classList.add('active');
 }
 
-// ─── CHART HELPERS ────────────────────────────────────────────────────────────
-function destroyChart(id) {
-  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
-}
-const chartDefaults = {
-  plugins: { legend: { labels: { color: '#7a90b0', font: { size: 11 }, boxWidth: 12 } }, tooltip: { backgroundColor: '#1a2235', titleColor: '#e2eaf5', bodyColor: '#94a3b8', borderColor: '#2d3748', borderWidth: 1 } },
-  responsive: true, maintainAspectRatio: true
-};
-function chartOpts() { return JSON.parse(JSON.stringify(chartDefaults)); }
-function xAxisOpts() { return { ticks: { color: '#7a90b0', font: { size: 11 } }, grid: { color: 'rgba(30,45,71,.3)' } }; }
-function yAxisOpts() { return { ticks: { color: '#7a90b0', font: { size: 11 }, callback: v => '₹' + (v>=100000 ? (v/100000).toFixed(1)+'L' : v>=1000 ? (v/1000).toFixed(0)+'k' : v) }, grid: { color: 'rgba(30,45,71,.3)' } }; }
-function doughnutOpts() {
-  return { plugins: { legend: { position: 'right', labels: { color: '#7a90b0', font: { size: 11 }, boxWidth: 12, padding: 8 } }, tooltip: { backgroundColor: '#1a2235', titleColor: '#e2eaf5', bodyColor: '#94a3b8', borderColor: '#2d3748', borderWidth: 1, callbacks: { label: ctx => ` ₹${Math.round(ctx.parsed).toLocaleString('en-IN')}` } } }, responsive: true, maintainAspectRatio: false };
-}
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function escAttr(s){return s.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-// ─── API HELPER ──────────────────────────────────────────────────────────────
-async function api(url, method='GET', body=null) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(url, opts);
-  if (!res.ok) throw new Error('API error ' + res.status);
+async function api(url,method='GET',body=null){
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  const res=await fetch(url,opts);
+  if(res.status===204)return null;
+  if(!res.ok)throw new Error(res.status+' '+url);
   return res.json();
 }
 
-// ─── START ───────────────────────────────────────────────────────────────────
-Chart.defaults.color = '#7a90b0';
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+const BASE_OPTS={plugins:{legend:{labels:{color:'#7a90b0',font:{size:11},boxWidth:12}},tooltip:{backgroundColor:'#1a2235',titleColor:'#e2eaf5',bodyColor:'#94a3b8',borderColor:'#2d3748',borderWidth:1}},responsive:true,maintainAspectRatio:true};
+function cOpts(){return JSON.parse(JSON.stringify(BASE_OPTS));}
+function xAx(){return{ticks:{color:'#7a90b0',font:{size:11}},grid:{color:'rgba(30,45,71,.3)'}};}
+function yAx(){return{ticks:{color:'#7a90b0',font:{size:11},callback:v=>'₹'+(v>=100000?(v/100000).toFixed(1)+'L':v>=1000?(v/1000).toFixed(0)+'k':v)},grid:{color:'rgba(30,45,71,.3)'}};}
+function dOpts(){return{plugins:{legend:{position:'right',labels:{color:'#7a90b0',font:{size:11},boxWidth:12,padding:8}},tooltip:{backgroundColor:'#1a2235',titleColor:'#e2eaf5',bodyColor:'#94a3b8',borderColor:'#2d3748',borderWidth:1,callbacks:{label:ctx=>` ₹${Math.round(ctx.parsed).toLocaleString('en-IN')}`}}},responsive:true,maintainAspectRatio:false};}
+
+Chart.defaults.color='#7a90b0';
 init();
 </script>
 </body>

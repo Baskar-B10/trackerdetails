@@ -97,16 +97,11 @@ public class FinancialService {
             }
         }
 
-        double totalSpending = Arrays.stream(monthlySpending).sum();
-        double totalInvestment = Arrays.stream(monthlyInvestment).sum();
-        double totalIncome = Arrays.stream(monthlyIncome).sum();
-        double totalLoan = Arrays.stream(monthlyLoan).sum();
-
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("totalSpending", totalSpending);
-        result.put("totalInvestment", totalInvestment);
-        result.put("totalIncome", totalIncome);
-        result.put("totalLoan", totalLoan);
+        result.put("totalSpending", Arrays.stream(monthlySpending).sum());
+        result.put("totalInvestment", Arrays.stream(monthlyInvestment).sum());
+        result.put("totalIncome", Arrays.stream(monthlyIncome).sum());
+        result.put("totalLoan", Arrays.stream(monthlyLoan).sum());
         result.put("monthlySpending", monthlySpending);
         result.put("monthlyInvestment", monthlyInvestment);
         result.put("monthlyIncome", monthlyIncome);
@@ -124,197 +119,180 @@ public class FinancialService {
             .collect(Collectors.toList());
     }
 
-    public XSSFWorkbook exportToExcel(int year) {
+    // ── Excel Export ─────────────────────────────────────────────────────────
+
+    public XSSFWorkbook exportToExcel(int year, Map<String, List<String>> customCats) {
         XSSFWorkbook wb = new XSSFWorkbook();
 
-        XSSFCellStyle headerStyle = createHeaderStyle(wb);
-        XSSFCellStyle groupStyle = createGroupStyle(wb);
-        XSSFCellStyle totalStyle = createTotalStyle(wb);
-        XSSFCellStyle numberStyle = createNumberStyle(wb);
+        XSSFCellStyle headerStyle  = createHeaderStyle(wb);
+        XSSFCellStyle groupStyle   = createGroupStyle(wb);
+        XSSFCellStyle totalStyle   = createTotalStyle(wb);
+        XSSFCellStyle numberStyle  = createNumberStyle(wb);
         XSSFCellStyle categoryStyle = createCategoryStyle(wb);
+        XSSFCellStyle customStyle  = createCustomStyle(wb);
 
-        Map<String, double[]> spendingMatrix = getMatrix(year, "SPENDING");
+        Map<String, double[]> spendingMatrix   = getMatrix(year, "SPENDING");
         Map<String, double[]> investmentMatrix = getMatrix(year, "INVESTMENT");
-        Map<String, double[]> interestMatrix = getMatrix(year, "INTEREST");
-        Map<String, double[]> loanMatrix = getMatrix(year, "LOAN");
+        Map<String, double[]> interestMatrix   = getMatrix(year, "INTEREST");
+        Map<String, double[]> loanMatrix       = getMatrix(year, "LOAN");
 
-        createStandardSheet(wb, "Spending", SPENDING_CATEGORIES, spendingMatrix,
-            headerStyle, totalStyle, numberStyle, categoryStyle, null, null);
+        List<String> spendExtra = customCats.getOrDefault("SPENDING", List.of());
+        List<String> invExtra   = customCats.getOrDefault("INVESTMENT", List.of());
+        List<String> intExtra   = customCats.getOrDefault("INTEREST", List.of());
+        List<String> loanExtra  = customCats.getOrDefault("LOAN", List.of());
 
-        List<String> investmentMain = INVESTMENT_CATEGORIES.subList(0, 10);
-        List<String> investmentSharing = INVESTMENT_CATEGORIES.subList(10, INVESTMENT_CATEGORIES.size());
-        createStandardSheet(wb, "Investment & Sharing", investmentMain, investmentMatrix,
-            headerStyle, totalStyle, numberStyle, categoryStyle, investmentSharing, groupStyle);
+        // Sheet 1: Spending
+        createSheet(wb, "Spending", year,
+            List.of(new Section("Spending", SPENDING_CATEGORIES, spendingMatrix),
+                    new Section("Custom", spendExtra, spendingMatrix)),
+            headerStyle, totalStyle, numberStyle, categoryStyle, customStyle, groupStyle);
 
-        createStandardSheet(wb, "Interest & Loan", INTEREST_CATEGORIES, interestMatrix,
-            headerStyle, totalStyle, numberStyle, categoryStyle, LOAN_CATEGORIES, groupStyle);
+        // Sheet 2: Investment & Sharing
+        createSheet(wb, "Investment & Sharing", year,
+            List.of(new Section("Investments", INVESTMENT_CATEGORIES.subList(0,10), investmentMatrix),
+                    new Section("Sharing", INVESTMENT_CATEGORIES.subList(10, INVESTMENT_CATEGORIES.size()), investmentMatrix),
+                    new Section("Custom", invExtra, investmentMatrix)),
+            headerStyle, totalStyle, numberStyle, categoryStyle, customStyle, groupStyle);
+
+        // Sheet 3: Interest & Loan
+        createSheet(wb, "Interest & Loan", year,
+            List.of(new Section("Interest & Income", INTEREST_CATEGORIES, interestMatrix),
+                    new Section("Custom", intExtra, interestMatrix),
+                    new Section("Loan Repayments", concat(LOAN_CATEGORIES, loanExtra), loanMatrix)),
+            headerStyle, totalStyle, numberStyle, categoryStyle, customStyle, groupStyle);
 
         return wb;
     }
 
-    private void createStandardSheet(XSSFWorkbook wb, String sheetName,
-                                     List<String> mainCats, Map<String, double[]> mainMatrix,
-                                     XSSFCellStyle headerStyle, XSSFCellStyle totalStyle,
-                                     XSSFCellStyle numberStyle, XSSFCellStyle categoryStyle,
-                                     List<String> secondaryCats, XSSFCellStyle groupStyle) {
-        XSSFSheet sheet = wb.createSheet(sheetName);
-        int rowNum = 0;
-
-        // Header row
-        Row header = sheet.createRow(rowNum++);
-        header.createCell(0).setCellValue("Details");
-        header.getCell(0).setCellStyle(headerStyle);
-        for (int m = 0; m < 12; m++) {
-            Cell c = header.createCell(m + 1);
-            c.setCellValue(MONTHS[m]);
-            c.setCellStyle(headerStyle);
-        }
-        Cell totalCell = header.createCell(13);
-        totalCell.setCellValue("Overall Total");
-        totalCell.setCellStyle(headerStyle);
-        Cell avgCell = header.createCell(14);
-        avgCell.setCellValue("Monthly Avg");
-        avgCell.setCellStyle(headerStyle);
-
-        // Main categories
-        double[] columnTotals = new double[12];
-        for (String cat : mainCats) {
-            Row row = sheet.createRow(rowNum++);
-            Cell catCell = row.createCell(0);
-            catCell.setCellValue(cat);
-            catCell.setCellStyle(categoryStyle);
-
-            double[] amounts = mainMatrix.getOrDefault(cat, new double[12]);
-            double rowTotal = 0;
-            for (int m = 0; m < 12; m++) {
-                Cell c = row.createCell(m + 1);
-                c.setCellValue(amounts[m]);
-                c.setCellStyle(numberStyle);
-                rowTotal += amounts[m];
-                columnTotals[m] += amounts[m];
-            }
-            row.createCell(13).setCellValue(rowTotal);
-            row.getCell(13).setCellStyle(totalStyle);
-            row.createCell(14).setCellValue(rowTotal / 12.0);
-            row.getCell(14).setCellStyle(numberStyle);
-        }
-
-        // Total row for main
-        Row totalRow = sheet.createRow(rowNum++);
-        Cell totLabel = totalRow.createCell(0);
-        totLabel.setCellValue("Total");
-        totLabel.setCellStyle(totalStyle);
-        double grandTotal = 0;
-        for (int m = 0; m < 12; m++) {
-            Cell c = totalRow.createCell(m + 1);
-            c.setCellValue(columnTotals[m]);
-            c.setCellStyle(totalStyle);
-            grandTotal += columnTotals[m];
-        }
-        totalRow.createCell(13).setCellValue(grandTotal);
-        totalRow.getCell(13).setCellStyle(totalStyle);
-        totalRow.createCell(14).setCellValue(grandTotal / 12.0);
-        totalRow.getCell(14).setCellStyle(totalStyle);
-
-        // Secondary section
-        if (secondaryCats != null && !secondaryCats.isEmpty()) {
-            rowNum++; // blank row
-            Row secHeader = sheet.createRow(rowNum++);
-            if (groupStyle != null) {
-                secHeader.createCell(0).setCellValue(secondaryCats.equals(LOAN_CATEGORIES) ? "Loan Details" : "Sharing / Transfers");
-                secHeader.getCell(0).setCellStyle(groupStyle);
-            }
-
-            double[] secColumnTotals = new double[12];
-            Map<String, double[]> secMatrix = secondaryCats.equals(LOAN_CATEGORIES) ?
-                getMatrix(0, "LOAN") : mainMatrix;
-            // For secondary, use the right matrix
-            for (String cat : secondaryCats) {
-                Row row = sheet.createRow(rowNum++);
-                Cell catCell = row.createCell(0);
-                catCell.setCellValue(cat);
-                catCell.setCellStyle(categoryStyle);
-
-                double[] amounts = secMatrix.getOrDefault(cat, new double[12]);
-                double rowTotal = 0;
-                for (int m = 0; m < 12; m++) {
-                    Cell c = row.createCell(m + 1);
-                    c.setCellValue(amounts[m]);
-                    c.setCellStyle(numberStyle);
-                    rowTotal += amounts[m];
-                    secColumnTotals[m] += amounts[m];
-                }
-                row.createCell(13).setCellValue(rowTotal);
-                row.getCell(13).setCellStyle(totalStyle);
-            }
-        }
-
-        // Auto-size columns
-        sheet.setColumnWidth(0, 10000);
-        for (int i = 1; i <= 14; i++) {
-            sheet.setColumnWidth(i, 3500);
-        }
+    private static List<String> concat(List<String> a, List<String> b) {
+        List<String> r = new ArrayList<>(a); r.addAll(b); return r;
     }
 
+    record Section(String label, List<String> cats, Map<String, double[]> matrix) {}
+
+    private void createSheet(XSSFWorkbook wb, String name, int year,
+                             List<Section> sections,
+                             XSSFCellStyle hdr, XSSFCellStyle total,
+                             XSSFCellStyle num, XSSFCellStyle cat,
+                             XSSFCellStyle custom, XSSFCellStyle grp) {
+        XSSFSheet sheet = wb.createSheet(name);
+        int rowNum = 0;
+
+        // Header
+        Row header = sheet.createRow(rowNum++);
+        cell(header, 0, "Details", hdr);
+        for (int m = 0; m < 12; m++) cell(header, m+1, MONTHS[m], hdr);
+        cell(header, 13, "Total " + year, hdr);
+        cell(header, 14, "Monthly Avg", hdr);
+
+        double[] grandTotals = new double[12];
+
+        for (Section sec : sections) {
+            if (sec.cats().isEmpty()) continue;
+
+            // Section group header
+            Row gh = sheet.createRow(rowNum++);
+            cell(gh, 0, sec.label(), grp);
+
+            double[] secTotals = new double[12];
+            for (String catName : sec.cats()) {
+                double[] amounts = sec.matrix().getOrDefault(catName, new double[12]);
+                double rowTotal = 0;
+                Row row = sheet.createRow(rowNum++);
+                XSSFCellStyle cs = sec.label().equals("Custom") ? custom : cat;
+                cell(row, 0, catName, cs);
+                for (int m = 0; m < 12; m++) {
+                    numCell(row, m+1, amounts[m], num);
+                    rowTotal += amounts[m];
+                    secTotals[m] += amounts[m];
+                    grandTotals[m] += amounts[m];
+                }
+                numCell(row, 13, rowTotal, total);
+                numCell(row, 14, rowTotal/12.0, num);
+            }
+
+            // Section subtotal
+            Row subRow = sheet.createRow(rowNum++);
+            double secTotal = Arrays.stream(secTotals).sum();
+            cell(subRow, 0, "Subtotal - " + sec.label(), total);
+            for (int m = 0; m < 12; m++) numCell(subRow, m+1, secTotals[m], total);
+            numCell(subRow, 13, secTotal, total);
+            numCell(subRow, 14, secTotal/12.0, total);
+            rowNum++; // blank row
+        }
+
+        // Grand total
+        Row gt = sheet.createRow(rowNum);
+        double grandTotal = Arrays.stream(grandTotals).sum();
+        cell(gt, 0, "GRAND TOTAL", total);
+        for (int m = 0; m < 12; m++) numCell(gt, m+1, grandTotals[m], total);
+        numCell(gt, 13, grandTotal, total);
+        numCell(gt, 14, grandTotal/12.0, total);
+
+        sheet.setColumnWidth(0, 11000);
+        for (int i = 1; i <= 14; i++) sheet.setColumnWidth(i, 3600);
+    }
+
+    private void cell(Row row, int col, String value, CellStyle style) {
+        Cell c = row.createCell(col);
+        c.setCellValue(value);
+        c.setCellStyle(style);
+    }
+
+    private void numCell(Row row, int col, double value, CellStyle style) {
+        Cell c = row.createCell(col);
+        c.setCellValue(value);
+        c.setCellStyle(style);
+    }
+
+    // ── Styles ───────────────────────────────────────────────────────────────
+
     private XSSFCellStyle createHeaderStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-        XSSFFont font = wb.createFont();
-        font.setBold(true);
-        font.setColor(IndexedColors.WHITE.getIndex());
-        style.setFont(font);
-        style.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0x16, (byte)0x32, (byte)0x4F}, null));
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        style.setAlignment(HorizontalAlignment.CENTER);
-        setBorder(style);
-        return style;
+        XSSFCellStyle s = wb.createCellStyle();
+        XSSFFont f = wb.createFont(); f.setBold(true); f.setColor(IndexedColors.WHITE.getIndex()); s.setFont(f);
+        s.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0x16,(byte)0x32,(byte)0x4F}, null));
+        s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        s.setAlignment(HorizontalAlignment.CENTER);
+        border(s); return s;
     }
 
     private XSSFCellStyle createGroupStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-        XSSFFont font = wb.createFont();
-        font.setBold(true);
-        style.setFont(font);
-        style.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0x21, (byte)0x39, (byte)0x55}, null));
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        setBorder(style);
-        return style;
+        XSSFCellStyle s = wb.createCellStyle();
+        XSSFFont f = wb.createFont(); f.setBold(true); s.setFont(f);
+        s.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0x21,(byte)0x39,(byte)0x55}, null));
+        s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        border(s); return s;
     }
 
     private XSSFCellStyle createTotalStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-        XSSFFont font = wb.createFont();
-        font.setBold(true);
-        style.setFont(font);
-        style.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0xE8, (byte)0xF5, (byte)0xE9}, null));
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        XSSFDataFormat fmt = wb.createDataFormat();
-        style.setDataFormat(fmt.getFormat("#,##0.00"));
-        setBorder(style);
-        return style;
+        XSSFCellStyle s = wb.createCellStyle();
+        XSSFFont f = wb.createFont(); f.setBold(true); s.setFont(f);
+        s.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0xE8,(byte)0xF5,(byte)0xE9}, null));
+        s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        s.setDataFormat(wb.createDataFormat().getFormat("#,##0.00"));
+        border(s); return s;
     }
 
     private XSSFCellStyle createNumberStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-        XSSFDataFormat fmt = wb.createDataFormat();
-        style.setDataFormat(fmt.getFormat("#,##0.00"));
-        setBorder(style);
-        return style;
+        XSSFCellStyle s = wb.createCellStyle();
+        s.setDataFormat(wb.createDataFormat().getFormat("#,##0.00"));
+        border(s); return s;
     }
 
     private XSSFCellStyle createCategoryStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-        XSSFFont font = wb.createFont();
-        font.setBold(false);
-        style.setFont(font);
-        style.setWrapText(false);
-        setBorder(style);
-        return style;
+        XSSFCellStyle s = wb.createCellStyle(); border(s); return s;
     }
 
-    private void setBorder(CellStyle style) {
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBorderTop(BorderStyle.THIN);
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setBorderRight(BorderStyle.THIN);
+    private XSSFCellStyle createCustomStyle(XSSFWorkbook wb) {
+        XSSFCellStyle s = wb.createCellStyle();
+        XSSFFont f = wb.createFont(); f.setItalic(true); s.setFont(f);
+        s.setFillForegroundColor(new XSSFColor(new byte[]{(byte)0xF0,(byte)0xF8,(byte)0xFF}, null));
+        s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        border(s); return s;
+    }
+
+    private void border(CellStyle s) {
+        s.setBorderBottom(BorderStyle.THIN); s.setBorderTop(BorderStyle.THIN);
+        s.setBorderLeft(BorderStyle.THIN);  s.setBorderRight(BorderStyle.THIN);
     }
 }

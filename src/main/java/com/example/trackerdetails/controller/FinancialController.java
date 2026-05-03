@@ -1,6 +1,8 @@
 package com.example.trackerdetails.controller;
 
+import com.example.trackerdetails.model.CustomCategory;
 import com.example.trackerdetails.model.FinancialEntry;
+import com.example.trackerdetails.repository.CustomCategoryRepository;
 import com.example.trackerdetails.service.FinancialService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,9 +18,11 @@ import java.util.*;
 public class FinancialController {
 
     private final FinancialService service;
+    private final CustomCategoryRepository customCategoryRepository;
 
-    public FinancialController(FinancialService service) {
+    public FinancialController(FinancialService service, CustomCategoryRepository customCategoryRepository) {
         this.service = service;
+        this.customCategoryRepository = customCategoryRepository;
     }
 
     @GetMapping("/")
@@ -67,29 +71,55 @@ public class FinancialController {
     public List<Integer> getYears() {
         List<Integer> years = service.getDistinctYears();
         int currentYear = LocalDate.now().getYear();
-        if (!years.contains(currentYear)) {
-            years.add(0, currentYear);
+        // Always include last 3 years and next year
+        for (int y = currentYear - 2; y <= currentYear + 1; y++) {
+            if (!years.contains(y)) years.add(y);
         }
         years.sort(Comparator.reverseOrder());
         return years;
     }
 
-    @GetMapping("/api/financial/categories")
+    // ── Custom Categories ────────────────────────────────────────────────────
+
+    @GetMapping("/api/categories")
     @ResponseBody
-    public Map<String, List<String>> getCategories() {
-        Map<String, List<String>> cats = new LinkedHashMap<>();
-        cats.put("SPENDING", FinancialService.SPENDING_CATEGORIES);
-        cats.put("INVESTMENT", FinancialService.INVESTMENT_CATEGORIES);
-        cats.put("INTEREST", FinancialService.INTEREST_CATEGORIES);
-        cats.put("LOAN", FinancialService.LOAN_CATEGORIES);
-        return cats;
+    public List<CustomCategory> getCustomCategories(@RequestParam String type) {
+        return customCategoryRepository.findByTypeOrderBySortOrderAsc(type);
+    }
+
+    @PostMapping("/api/categories")
+    @ResponseBody
+    public ResponseEntity<CustomCategory> addCustomCategory(@RequestBody Map<String, String> body) {
+        String type = body.get("type");
+        String name = body.get("name").trim();
+        if (name.isEmpty()) return ResponseEntity.badRequest().build();
+        if (customCategoryRepository.existsByTypeAndName(type, name)) {
+            return ResponseEntity.status(409).build();
+        }
+        long count = customCategoryRepository.findByTypeOrderBySortOrderAsc(type).size();
+        CustomCategory cat = new CustomCategory(type, name, (int) count);
+        return ResponseEntity.ok(customCategoryRepository.save(cat));
+    }
+
+    @DeleteMapping("/api/categories/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteCustomCategory(@PathVariable String id) {
+        customCategoryRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/export/excel")
     public void exportExcel(@RequestParam int year, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=financial_" + year + ".xlsx");
-        try (XSSFWorkbook wb = service.exportToExcel(year)) {
+        // Collect all custom category names per type
+        Map<String, List<String>> customCats = new LinkedHashMap<>();
+        for (String t : List.of("SPENDING","INVESTMENT","INTEREST","LOAN")) {
+            List<String> names = customCategoryRepository.findByTypeOrderBySortOrderAsc(t)
+                    .stream().map(CustomCategory::getName).toList();
+            customCats.put(t, names);
+        }
+        try (XSSFWorkbook wb = service.exportToExcel(year, customCats)) {
             wb.write(response.getOutputStream());
             response.getOutputStream().flush();
         }

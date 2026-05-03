@@ -1,94 +1,748 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Monthly Expenditure Tracker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinVault – Financial Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root {
+  --bg: #080d18;
+  --surface: #0f1624;
+  --card: #131c2e;
+  --card2: #172035;
+  --border: #1e2d47;
+  --border2: #243450;
+  --green: #10d48e;
+  --green2: #0ea572;
+  --gold: #f0b429;
+  --red: #f04f58;
+  --blue: #3b9eff;
+  --purple: #9b6dff;
+  --text: #e2eaf5;
+  --muted: #7a90b0;
+  --muted2: #4e6180;
+  --hover: #1a2640;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; min-height: 100vh; }
+
+/* ── TOP BAR ── */
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--text); text-decoration: none; }
+.logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--green), #0ea572); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.logo span { color: var(--green); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.year-selector { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+.year-selector:focus { outline: none; border-color: var(--green); }
+.btn-export { background: linear-gradient(135deg, #0ea572, #0c9060); color: #fff; border: none; padding: 7px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity .2s; }
+.btn-export:hover { opacity: .85; }
+
+/* ── TAB NAV ── */
+.tabnav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 4px; }
+.tabnav-item { padding: 12px 20px; cursor: pointer; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; transition: all .2s; display: flex; align-items: center; gap: 7px; font-size: 13.5px; white-space: nowrap; }
+.tabnav-item:hover { color: var(--text); background: var(--hover); }
+.tabnav-item.active { color: var(--green); border-bottom-color: var(--green); }
+
+/* ── CONTENT ── */
+.main-content { padding: 24px; max-width: 1600px; margin: 0 auto; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ── KPI CARDS ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
+.kpi-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.kpi-card.spending::after { background: linear-gradient(90deg, var(--red), #ff8a70); }
+.kpi-card.investment::after { background: linear-gradient(90deg, var(--green), #4ade80); }
+.kpi-card.income::after { background: linear-gradient(90deg, var(--blue), #7dd3fc); }
+.kpi-card.savings::after { background: linear-gradient(90deg, var(--gold), #fde68a); }
+.kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+.kpi-card.spending .kpi-icon { background: rgba(240,79,88,.15); color: var(--red); }
+.kpi-card.investment .kpi-icon { background: rgba(16,212,142,.15); color: var(--green); }
+.kpi-card.income .kpi-icon { background: rgba(59,158,255,.15); color: var(--blue); }
+.kpi-card.savings .kpi-icon { background: rgba(240,180,41,.15); color: var(--gold); }
+.kpi-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .6px; font-weight: 500; margin-bottom: 6px; }
+.kpi-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.kpi-sub { font-size: 11.5px; color: var(--muted); }
+
+/* ── CHARTS ── */
+.chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.chart-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+.chart-wrap { position: relative; }
+
+/* ── SPREADSHEET TABLE ── */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.section-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+.badge-red { background: rgba(240,79,88,.15); color: var(--red); }
+.badge-green { background: rgba(16,212,142,.15); color: var(--green); }
+.badge-blue { background: rgba(59,158,255,.15); color: var(--blue); }
+.badge-gold { background: rgba(240,180,41,.15); color: var(--gold); }
+
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.fin-table-container { overflow-x: auto; max-height: 70vh; overflow-y: auto; }
+.fin-table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+.fin-table thead { position: sticky; top: 0; z-index: 10; }
+.fin-table thead th { background: #0d1929; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; padding: 10px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+.fin-table thead th:first-child { text-align: left; position: sticky; left: 0; background: #0d1929; z-index: 11; width: 200px; min-width: 200px; }
+.fin-table tbody tr { border-bottom: 1px solid rgba(30,45,71,.5); transition: background .15s; }
+.fin-table tbody tr:hover:not(.group-row):not(.total-row) { background: var(--hover); }
+.fin-table td { padding: 0; font-size: 13px; vertical-align: middle; }
+.fin-table td:first-child { position: sticky; left: 0; background: var(--card); z-index: 5; }
+.fin-table tbody tr:hover td:first-child { background: var(--hover); }
+
+.cat-cell { padding: 9px 12px; color: var(--text); font-size: 13px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.cat-cell i { color: var(--muted2); font-size: 12px; }
+
+.num-cell { padding: 9px 10px; text-align: right; color: var(--text); cursor: pointer; position: relative; min-width: 80px; transition: background .15s; }
+.num-cell:hover { background: rgba(59,158,255,.08); }
+.num-cell.has-value { color: var(--text); }
+.num-cell.zero { color: var(--muted2); }
+.num-cell input { width: 100%; background: transparent; border: none; outline: none; color: var(--blue); text-align: right; font-size: 13px; font-family: 'Inter', sans-serif; padding: 0; }
+
+.total-cell { padding: 9px 10px; text-align: right; font-weight: 600; color: var(--green); background: rgba(16,212,142,.04); min-width: 100px; }
+.avg-cell { padding: 9px 10px; text-align: right; color: var(--muted); background: rgba(16,212,142,.02); min-width: 90px; font-size: 12px; }
+
+.group-row td { background: #0d1929 !important; padding: 6px 12px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); border-top: 1px solid var(--border2); }
+.total-row td { background: rgba(16,212,142,.05) !important; font-weight: 700; border-top: 2px solid var(--border2); }
+.total-row td:first-child { color: var(--green); }
+.total-row .num-cell { color: var(--green); cursor: default; }
+.total-row .num-cell:hover { background: transparent; }
+.total-row .total-cell { color: var(--green); font-size: 14px; }
+
+/* ── ANALYSIS CHARTS ── */
+.analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.analysis-full { grid-column: 1 / -1; }
+
+/* ── TOOLTIP / SAVE INDICATOR ── */
+.save-indicator { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(8px); transition: all .3s; z-index: 999; display: flex; align-items: center; gap: 8px; }
+.save-indicator.show { opacity: 1; transform: translateY(0); }
+
+/* ── MONTH LABELS ── */
+.month-col { min-width: 80px; }
+.th-total { color: var(--green) !important; min-width: 100px; }
+.th-avg { min-width: 90px; }
+
+/* ── NO DATA ── */
+.no-data { text-align: center; padding: 60px 20px; color: var(--muted); }
+.no-data i { font-size: 40px; margin-bottom: 12px; display: block; }
+
+/* ── SUMMARY ROW in analysis ── */
+.summary-table { width: 100%; border-collapse: collapse; }
+.summary-table th, .summary-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+.summary-table th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; }
+.summary-table .val { text-align: right; font-weight: 600; }
+.summary-table tr:hover { background: var(--hover); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
+
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .chart-grid, .chart-grid2 { grid-template-columns: 1fr; }
+  .analysis-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Monthly Expenditure & Savings</h2>
-        <div>
-            <a href="/form" class="btn btn-primary">Add Entry</a>
-            <a href="/export/excel" class="btn btn-outline-secondary">Download Excel</a>
-        </div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="logo" href="/">
+    <div class="logo-icon">₹</div>
+    Fin<span>Vault</span>
+  </a>
+  <div class="topbar-right">
+    <select class="year-selector" id="yearSelector" onchange="onYearChange(this.value)"></select>
+    <button class="btn-export" onclick="exportExcel()"><i class="bi bi-file-earmark-excel"></i> Export Excel</button>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <div class="tabnav-item active" onclick="showTab('dashboard',this)"><i class="bi bi-grid-1x2"></i> Dashboard</div>
+  <div class="tabnav-item" onclick="showTab('spending',this)"><i class="bi bi-cart3"></i> Spending</div>
+  <div class="tabnav-item" onclick="showTab('investment',this)"><i class="bi bi-graph-up-arrow"></i> Investments</div>
+  <div class="tabnav-item" onclick="showTab('interest',this)"><i class="bi bi-cash-coin"></i> Interest & Income</div>
+  <div class="tabnav-item" onclick="showTab('loan',this)"><i class="bi bi-bank"></i> Loans</div>
+  <div class="tabnav-item" onclick="showTab('analysis',this)"><i class="bi bi-bar-chart-line"></i> Analysis</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="tab-pane active">
+    <div class="kpi-grid">
+      <div class="kpi-card spending">
+        <div class="kpi-icon"><i class="bi bi-arrow-up-circle"></i></div>
+        <div class="kpi-label">Total Spending</div>
+        <div class="kpi-value" id="kpi-spending">—</div>
+        <div class="kpi-sub" id="kpi-spending-sub">Monthly avg: —</div>
+      </div>
+      <div class="kpi-card investment">
+        <div class="kpi-icon"><i class="bi bi-piggy-bank"></i></div>
+        <div class="kpi-label">Total Investments</div>
+        <div class="kpi-value" id="kpi-investment">—</div>
+        <div class="kpi-sub" id="kpi-investment-sub">Monthly avg: —</div>
+      </div>
+      <div class="kpi-card income">
+        <div class="kpi-icon"><i class="bi bi-cash-stack"></i></div>
+        <div class="kpi-label">Total Income/Interest</div>
+        <div class="kpi-value" id="kpi-income">—</div>
+        <div class="kpi-sub" id="kpi-income-sub">Monthly avg: —</div>
+      </div>
+      <div class="kpi-card savings">
+        <div class="kpi-icon"><i class="bi bi-wallet2"></i></div>
+        <div class="kpi-label">Net Outflow</div>
+        <div class="kpi-value" id="kpi-net">—</div>
+        <div class="kpi-sub" id="kpi-net-sub">Spending + Investment − Income</div>
+      </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <table class="table table-striped" id="expTable">
-                <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Year</th>
-                    <th>Amount</th>
-                    <th>Savings</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div class="col-md-4">
-            <canvas id="chartCanvas"></canvas>
-        </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Monthly Trend</div>
+        <div class="chart-wrap"><canvas id="chartTrend" height="220"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Portfolio Breakdown</div>
+        <div class="chart-wrap" style="max-height:220px;display:flex;justify-content:center"><canvas id="chartPortfolio" height="220"></canvas></div>
+      </div>
     </div>
-</div>
+
+    <div class="chart-grid2">
+      <div class="chart-card">
+        <div class="chart-title">Top Spending Categories</div>
+        <div class="chart-wrap"><canvas id="chartSpendCat" height="240"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Investment Breakdown</div>
+        <div class="chart-wrap" style="max-height:240px;display:flex;justify-content:center"><canvas id="chartInvCat" height="240"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPENDING TAB -->
+  <div id="tab-spending" class="tab-pane">
+    <div class="section-header">
+      <div class="section-title"><i class="bi bi-cart3" style="color:var(--red)"></i> Spending Tracker <span class="section-badge badge-red">Monthly</span></div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+    </div>
+    <div class="table-wrap">
+      <div class="fin-table-container" id="spending-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- INVESTMENT TAB -->
+  <div id="tab-investment" class="tab-pane">
+    <div class="section-header">
+      <div class="section-title"><i class="bi bi-graph-up-arrow" style="color:var(--green)"></i> Investment Tracker <span class="section-badge badge-green">Monthly</span></div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+    </div>
+    <div class="table-wrap">
+      <div class="fin-table-container" id="investment-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- INTEREST / INCOME TAB -->
+  <div id="tab-interest" class="tab-pane">
+    <div class="section-header">
+      <div class="section-title"><i class="bi bi-cash-coin" style="color:var(--blue)"></i> Interest & Income <span class="section-badge badge-blue">Monthly</span></div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+    </div>
+    <div class="table-wrap">
+      <div class="fin-table-container" id="interest-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- LOAN TAB -->
+  <div id="tab-loan" class="tab-pane">
+    <div class="section-header">
+      <div class="section-title"><i class="bi bi-bank" style="color:var(--gold)"></i> Loan Tracker <span class="section-badge badge-gold">Monthly</span></div>
+      <div style="color:var(--muted);font-size:12px"><i class="bi bi-info-circle"></i> Click any cell to edit</div>
+    </div>
+    <div class="table-wrap">
+      <div class="fin-table-container" id="loan-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS TAB -->
+  <div id="tab-analysis" class="tab-pane">
+    <div class="analysis-grid">
+      <div class="chart-card analysis-full">
+        <div class="chart-title">Monthly Flow Summary (Spending vs Investment vs Income)</div>
+        <canvas id="chartAnalysisFlow" height="120"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Cumulative Outflow</div>
+        <canvas id="chartCumulative" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Monthly Savings Rate (%)</div>
+        <canvas id="chartSavingsRate" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Spending Category Breakdown</div>
+        <canvas id="chartAnalysisSpend" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Investment Portfolio Composition</div>
+        <canvas id="chartAnalysisInv" height="200"></canvas>
+      </div>
+      <div class="chart-card analysis-full">
+        <div class="chart-title">Monthly Summary Table</div>
+        <div style="overflow-x:auto" id="analysisSummaryTable"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- main-content -->
+
+<!-- SAVE INDICATOR -->
+<div class="save-indicator" id="saveIndicator"><i class="bi bi-check-circle-fill"></i> Saved</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    async function loadData() {
-        const res = await fetch('/api/expenditures');
-        const data = await res.json();
-        const tbody = document.querySelector('#expTable tbody');
-        tbody.innerHTML = '';
-        data.forEach(e => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${e.month}</td>
-                <td>${e.year}</td>
-                <td>${e.amount}</td>
-                <td>${e.savings}</td>
-                <td>${e.category || ''}</td>
-                <td>
-                    <a class="btn btn-sm btn-secondary" href="/form?id=${e.id}">Edit</a>
-                    <button class="btn btn-sm btn-danger" onclick="del('${e.id}')">Delete</button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-        drawChart(data);
-    }
+// ─── CONSTANTS ─────────────────────────────────────────────────────────────
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-    async function del(id) {
-        if (!confirm('Delete this record?')) return;
-        await fetch('/api/expenditures/' + id, {method: 'DELETE'});
-        loadData();
-    }
+const CATEGORIES = {
+  SPENDING: {
+    groups: [
+      { label: '🏠 Housing & Utilities', items: ['Rent','Electricity Bill','Gas','Maid','Water Can','Repair Works/Installation'] },
+      { label: '🛒 Food & Kitchen',       items: ['Milk','Grocery','Grocery (Detergents/Hair Products)','Vegetables','Flowers','Healthy Snacks','Hotel','Snacks'] },
+      { label: '🚗 Transport',            items: ['Petrol','Travel'] },
+      { label: '💊 Health & Personal',    items: ['Medical','Grooming'] },
+      { label: '📱 Communication',        items: ['Recharge (Phone & Wifi)','Other Bills (Insurance/DTH)'] },
+      { label: '🎭 Entertainment',        items: ['Movie/Entertainment','Outing/Travel for Experience'] },
+      { label: '🛍️ Shopping',             items: ['Shopping (Dress/Gifts)','Shopping for Home','Shopping for Family'] },
+      { label: '📦 Other',               items: ['Extras'] }
+    ]
+  },
+  INVESTMENT: {
+    groups: [
+      { label: '📈 Investments',    items: ['Gold and Silver','SBI Life Insurance','Recurring Deposit (RD)','PPF','Stocks','SBI Jai Nivesh (SIP)','Parag Flexi Cap SIP','Large Cap Fund SIP','Bond Investment (RBI + Corporate)','NPS'] },
+      { label: '👨‍👩‍👧 Sharing',         items: ['Sharing - To Family Member','Sharing - To Family','Sharing - To Relatives'] }
+    ]
+  },
+  INTEREST: {
+    groups: [
+      { label: '💰 Income & Returns', items: ['From Parents/Relatives','Waste Plastic','Sell Product/Coupons','Gas Subsidy','Indian Bank Interest','SBI Interest','ICICI Interest','Post Office Interest','Dividend','Bond Interest','FD/RD Interest','Cashback'] }
+    ]
+  },
+  LOAN: {
+    groups: [
+      { label: '🏦 Loan Repayments', items: ['Gold Loan','Personal Loan','Other Loan'] }
+    ]
+  }
+};
 
-    function drawChart(data) {
-        const labels = data.map(d => d.month + ' ' + d.year);
-        const amounts = data.map(d => d.amount);
-        const save = data.map(d => d.savings);
-        const ctx = document.getElementById('chartCanvas');
-        if (window._trackerChart) window._trackerChart.destroy();
-        window._trackerChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {label: 'Expense', data: amounts, backgroundColor: 'rgba(255,99,132,0.6)'},
-                    {label: 'Savings', data: save, backgroundColor: 'rgba(75,192,192,0.6)'}
-                ]
-            },
-            options: {responsive: true}
-        });
-    }
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let currentYear = new Date().getFullYear();
+let summaryData = {};
+let matrixCache = {};
+let chartInstances = {};
 
-    loadData();
+// ─── INIT ────────────────────────────────────────────────────────────────────
+async function init() {
+  await loadYears();
+  await refreshAll();
+}
+
+async function loadYears() {
+  const years = await api('/api/financial/years');
+  const sel = document.getElementById('yearSelector');
+  sel.innerHTML = '';
+  const fy = [currentYear];
+  const merged = [...new Set([...fy, ...years])].sort((a,b) => b-a);
+  merged.forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if (y === currentYear) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+async function onYearChange(y) {
+  currentYear = parseInt(y);
+  matrixCache = {};
+  await refreshAll();
+}
+
+async function refreshAll() {
+  summaryData = await api('/api/financial/summary?year=' + currentYear);
+  updateKPIs();
+  renderDashboardCharts();
+  renderTable('SPENDING','spending-table-wrap');
+  renderTable('INVESTMENT','investment-table-wrap');
+  renderTable('INTEREST','interest-table-wrap');
+  renderTable('LOAN','loan-table-wrap');
+  renderAnalysis();
+}
+
+// ─── FORMAT ──────────────────────────────────────────────────────────────────
+function fmt(n) {
+  if (!n) return '—';
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+function fmtNum(n) {
+  if (!n || n === 0) return '';
+  return Math.round(n).toLocaleString('en-IN');
+}
+function fmtVal(n) {
+  if (!n || n === 0) return '0';
+  return n.toLocaleString('en-IN', {maximumFractionDigits: 0});
+}
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function updateKPIs() {
+  const { totalSpending, totalInvestment, totalIncome, monthlySpending, monthlyInvestment, monthlyIncome } = summaryData;
+  const months = MONTHS.filter((_,i) => (monthlySpending[i]||0)+(monthlyInvestment[i]||0)+(monthlyIncome[i]||0) > 0).length || 12;
+
+  document.getElementById('kpi-spending').textContent = fmt(totalSpending);
+  document.getElementById('kpi-spending-sub').textContent = 'Monthly avg: ' + fmt(totalSpending/months);
+  document.getElementById('kpi-investment').textContent = fmt(totalInvestment);
+  document.getElementById('kpi-investment-sub').textContent = 'Monthly avg: ' + fmt(totalInvestment/months);
+  document.getElementById('kpi-income').textContent = fmt(totalIncome);
+  document.getElementById('kpi-income-sub').textContent = 'Monthly avg: ' + fmt(totalIncome/months);
+  const net = (totalSpending||0) + (totalInvestment||0) - (totalIncome||0);
+  document.getElementById('kpi-net').textContent = fmt(net);
+}
+
+// ─── DASHBOARD CHARTS ────────────────────────────────────────────────────────
+function renderDashboardCharts() {
+  const { monthlySpending, monthlyInvestment, monthlyIncome, spendingByCategory, investmentByCategory } = summaryData;
+
+  destroyChart('chartTrend');
+  chartInstances['chartTrend'] = new Chart(document.getElementById('chartTrend'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Spending', data: monthlySpending, backgroundColor: 'rgba(240,79,88,.75)', borderRadius: 4 },
+        { label: 'Investment', data: monthlyInvestment, backgroundColor: 'rgba(16,212,142,.75)', borderRadius: 4 },
+        { label: 'Income', data: monthlyIncome, backgroundColor: 'rgba(59,158,255,.75)', borderRadius: 4 }
+      ]
+    },
+    options: { ...chartOpts(), scales: { x: { ...xAxisOpts(), stacked: false }, y: { ...yAxisOpts() } } }
+  });
+
+  const totalS = (summaryData.totalSpending||0), totalI = (summaryData.totalInvestment||0), totalInc = (summaryData.totalIncome||0);
+  destroyChart('chartPortfolio');
+  chartInstances['chartPortfolio'] = new Chart(document.getElementById('chartPortfolio'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Spending','Investment','Income'],
+      datasets: [{ data: [totalS, totalI, totalInc], backgroundColor: ['rgba(240,79,88,.85)','rgba(16,212,142,.85)','rgba(59,158,255,.85)'], borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: { ...doughnutOpts() }
+  });
+
+  const spendEntries = Object.entries(spendingByCategory||{}).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  destroyChart('chartSpendCat');
+  chartInstances['chartSpendCat'] = new Chart(document.getElementById('chartSpendCat'), {
+    type: 'bar',
+    data: {
+      labels: spendEntries.map(e=>e[0]),
+      datasets: [{ label: 'Amount', data: spendEntries.map(e=>e[1]), backgroundColor: spendEntries.map((_,i) => `hsl(${350+i*5},80%,${55+i*2}%)`), borderRadius: 4 }]
+    },
+    options: { ...chartOpts(), indexAxis: 'y', scales: { x: { ...yAxisOpts() }, y: { ...xAxisOpts() } } }
+  });
+
+  const invEntries = Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
+  destroyChart('chartInvCat');
+  chartInstances['chartInvCat'] = new Chart(document.getElementById('chartInvCat'), {
+    type: 'doughnut',
+    data: {
+      labels: invEntries.map(e=>e[0]),
+      datasets: [{ data: invEntries.map(e=>e[1]), backgroundColor: invEntries.map((_,i) => `hsl(${140+i*18},65%,${45+i*3}%)`), borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: { ...doughnutOpts() }
+  });
+}
+
+// ─── ANALYSIS CHARTS ────────────────────────────────────────────────────────
+function renderAnalysis() {
+  const { monthlySpending, monthlyInvestment, monthlyIncome, spendingByCategory, investmentByCategory } = summaryData;
+
+  destroyChart('chartAnalysisFlow');
+  chartInstances['chartAnalysisFlow'] = new Chart(document.getElementById('chartAnalysisFlow'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Spending', data: monthlySpending, borderColor: 'var(--red)', backgroundColor: 'rgba(240,79,88,.1)', fill: true, tension: .35, pointRadius: 4 },
+        { label: 'Investment', data: monthlyInvestment, borderColor: 'var(--green)', backgroundColor: 'rgba(16,212,142,.1)', fill: true, tension: .35, pointRadius: 4 },
+        { label: 'Income', data: monthlyIncome, borderColor: 'var(--blue)', backgroundColor: 'rgba(59,158,255,.1)', fill: true, tension: .35, pointRadius: 4 }
+      ]
+    },
+    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts() } } }
+  });
+
+  const cumSpend = [], cumInv = [];
+  let cs = 0, ci = 0;
+  monthlySpending.forEach((v,i) => { cs += v||0; ci += monthlyInvestment[i]||0; cumSpend.push(cs); cumInv.push(ci); });
+  destroyChart('chartCumulative');
+  chartInstances['chartCumulative'] = new Chart(document.getElementById('chartCumulative'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Cumulative Spending', data: cumSpend, borderColor: 'var(--red)', fill: false, tension: .3, pointRadius: 3 },
+        { label: 'Cumulative Investment', data: cumInv, borderColor: 'var(--green)', fill: false, tension: .3, pointRadius: 3 }
+      ]
+    },
+    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts() } } }
+  });
+
+  const savingsRate = monthlySpending.map((s,i) => {
+    const inc = monthlyIncome[i]||0, inv = monthlyInvestment[i]||0, sp = s||0;
+    const total = sp + inv;
+    return total > 0 ? Math.round((inc / total) * 100) : 0;
+  });
+  destroyChart('chartSavingsRate');
+  chartInstances['chartSavingsRate'] = new Chart(document.getElementById('chartSavingsRate'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{ label: 'Income/Outflow %', data: savingsRate, backgroundColor: savingsRate.map(v => v >= 20 ? 'rgba(16,212,142,.75)' : 'rgba(240,180,41,.75)'), borderRadius: 4 }]
+    },
+    options: { ...chartOpts(), scales: { x: { ...xAxisOpts() }, y: { ...yAxisOpts(), max: 100 } } }
+  });
+
+  const spendEntries2 = Object.entries(spendingByCategory||{}).filter(e=>e[1]>0);
+  destroyChart('chartAnalysisSpend');
+  chartInstances['chartAnalysisSpend'] = new Chart(document.getElementById('chartAnalysisSpend'), {
+    type: 'pie',
+    data: {
+      labels: spendEntries2.map(e=>e[0]),
+      datasets: [{ data: spendEntries2.map(e=>e[1]), backgroundColor: spendEntries2.map((_,i) => `hsl(${350+i*13},75%,${52+i*2}%)`), borderWidth: 0 }]
+    },
+    options: { ...doughnutOpts() }
+  });
+
+  const invEntries2 = Object.entries(investmentByCategory||{}).filter(e=>e[1]>0);
+  destroyChart('chartAnalysisInv');
+  chartInstances['chartAnalysisInv'] = new Chart(document.getElementById('chartAnalysisInv'), {
+    type: 'pie',
+    data: {
+      labels: invEntries2.map(e=>e[0]),
+      datasets: [{ data: invEntries2.map(e=>e[1]), backgroundColor: invEntries2.map((_,i) => `hsl(${140+i*20},65%,${45+i*3}%)`), borderWidth: 0 }]
+    },
+    options: { ...doughnutOpts() }
+  });
+
+  // Summary table
+  const wrap = document.getElementById('analysisSummaryTable');
+  let html = '<table class="summary-table"><thead><tr><th>Month</th><th class="val">Spending (₹)</th><th class="val">Investment (₹)</th><th class="val">Income (₹)</th><th class="val">Net Outflow (₹)</th></tr></thead><tbody>';
+  let ts=0,ti=0,tinc=0;
+  MONTHS.forEach((m,i) => {
+    const s=monthlySpending[i]||0, inv=monthlyInvestment[i]||0, inc=monthlyIncome[i]||0;
+    const net = s+inv-inc;
+    ts+=s; ti+=inv; tinc+=inc;
+    if (s+inv+inc === 0) return;
+    html += `<tr><td>${m} ${currentYear}</td><td class="val" style="color:var(--red)">${fmt(s)}</td><td class="val" style="color:var(--green)">${fmt(inv)}</td><td class="val" style="color:var(--blue)">${fmt(inc)}</td><td class="val" style="color:var(--gold)">${fmt(net)}</td></tr>`;
+  });
+  html += `<tr style="font-weight:700;border-top:2px solid var(--border2)"><td>Total</td><td class="val" style="color:var(--red)">${fmt(ts)}</td><td class="val" style="color:var(--green)">${fmt(ti)}</td><td class="val" style="color:var(--blue)">${fmt(tinc)}</td><td class="val" style="color:var(--gold)">${fmt(ts+ti-tinc)}</td></tr>`;
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+// ─── TABLE RENDERING ─────────────────────────────────────────────────────────
+async function renderTable(type, wrapperId) {
+  const matrixResp = await api('/api/financial/matrix?year=' + currentYear + '&type=' + type);
+  const data = matrixResp.data || {};
+  const wrapper = document.getElementById(wrapperId);
+  const config = CATEGORIES[type];
+
+  let html = '<table class="fin-table"><thead><tr>';
+  html += '<th>Category</th>';
+  MONTHS.forEach(m => html += `<th class="month-col">${m}</th>`);
+  html += '<th class="th-total">Total</th><th class="th-avg">Avg/Mo</th></tr></thead><tbody>';
+
+  config.groups.forEach((group, gi) => {
+    // Group header
+    html += `<tr class="group-row"><td colspan="15">${group.label}</td></tr>`;
+
+    let groupTotals = new Array(12).fill(0);
+    group.items.forEach(cat => {
+      const amounts = data[cat] || new Array(12).fill(0);
+      const rowTotal = amounts.reduce((a,b) => a+(b||0), 0);
+      amounts.forEach((v,i) => groupTotals[i] += (v||0));
+
+      html += `<tr>`;
+      html += `<td><div class="cat-cell"><i class="bi bi-dash"></i>${cat}</div></td>`;
+      MONTHS.forEach((_, mi) => {
+        const v = amounts[mi] || 0;
+        html += `<td class="num-cell ${v>0?'has-value':'zero'}" data-type="${type}" data-cat="${escAttr(cat)}" data-month="${mi+1}" onclick="editCell(this)">`;
+        html += v > 0 ? fmtVal(v) : '';
+        html += '</td>';
+      });
+      html += `<td class="total-cell">${rowTotal > 0 ? fmtVal(rowTotal) : ''}</td>`;
+      html += `<td class="avg-cell">${rowTotal > 0 ? fmtVal(rowTotal/12) : ''}</td>`;
+      html += '</tr>';
+    });
+
+    // Group total row
+    const groupTotal = groupTotals.reduce((a,b)=>a+b,0);
+    if (groupTotal > 0) {
+      html += '<tr class="total-row">';
+      html += `<td><div class="cat-cell"><b>Subtotal</b></div></td>`;
+      groupTotals.forEach(v => html += `<td class="num-cell">${v>0?fmtVal(v):''}</td>`);
+      html += `<td class="total-cell">${fmtVal(groupTotal)}</td>`;
+      html += `<td class="avg-cell">${fmtVal(groupTotal/12)}</td>`;
+      html += '</tr>';
+    }
+  });
+
+  // Grand total
+  const allAmounts = config.groups.flatMap(g => g.items).map(cat => (data[cat] || new Array(12).fill(0)));
+  const grandTotals = new Array(12).fill(0);
+  allAmounts.forEach(arr => arr.forEach((v,i) => grandTotals[i] += (v||0)));
+  const grandTotal = grandTotals.reduce((a,b)=>a+b,0);
+
+  html += '<tr class="total-row" style="border-top:2px solid var(--green);opacity:.9">';
+  html += '<td><div class="cat-cell"><b style="color:var(--green)">GRAND TOTAL</b></div></td>';
+  grandTotals.forEach(v => html += `<td class="num-cell">${v>0?fmtVal(v):''}</td>`);
+  html += `<td class="total-cell" style="font-size:14px">${fmtVal(grandTotal)}</td>`;
+  html += `<td class="avg-cell">${fmtVal(grandTotal/12)}</td>`;
+  html += '</tr>';
+
+  html += '</tbody></table>';
+  wrapper.innerHTML = html;
+}
+
+// ─── CELL EDITING ────────────────────────────────────────────────────────────
+function escAttr(s) { return s.replace(/"/g,'&quot;'); }
+
+function editCell(td) {
+  if (td.classList.contains('editing')) return;
+  td.classList.add('editing');
+  const type = td.dataset.type;
+  const cat = td.dataset.cat;
+  const month = parseInt(td.dataset.month);
+  const current = td.textContent.replace(/,/g,'').trim() || '0';
+
+  td.innerHTML = `<input type="number" step="0.01" value="${current==='0'?'':current}" placeholder="0" autofocus>`;
+  const inp = td.querySelector('input');
+  inp.focus();
+  inp.select();
+
+  const save = async () => {
+    const val = parseFloat(inp.value) || 0;
+    td.classList.remove('editing');
+    td.textContent = val > 0 ? fmtVal(val) : '';
+    td.className = `num-cell ${val>0?'has-value':'zero'}`;
+    td.dataset.type = type; td.dataset.cat = cat; td.dataset.month = month;
+    td.onclick = () => editCell(td);
+    await saveEntry(currentYear, month, type, cat, val);
+    updateRowTotals(td);
+  };
+
+  inp.addEventListener('blur', save);
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { inp.blur(); }
+    if (e.key === 'Escape') {
+      td.classList.remove('editing');
+      td.textContent = current !== '0' ? fmtVal(parseFloat(current)) : '';
+      td.className = `num-cell ${current!=='0'?'has-value':'zero'}`;
+      td.dataset.type = type; td.dataset.cat = cat; td.dataset.month = month;
+      td.onclick = () => editCell(td);
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      inp.blur();
+      const all = Array.from(td.closest('tbody').querySelectorAll('.num-cell:not(.total-row .num-cell)'));
+      const idx = all.indexOf(td);
+      if (idx >= 0 && idx < all.length - 1) setTimeout(() => all[idx+1].click(), 50);
+    }
+  });
+}
+
+function updateRowTotals(td) {
+  const row = td.closest('tr');
+  const cells = Array.from(row.querySelectorAll('.num-cell[data-month]'));
+  const total = cells.reduce((s, c) => {
+    const v = parseFloat(c.textContent.replace(/,/g,'')) || 0;
+    return s + v;
+  }, 0);
+  const totalCell = row.querySelector('.total-cell');
+  const avgCell = row.querySelector('.avg-cell');
+  if (totalCell) totalCell.textContent = total > 0 ? fmtVal(total) : '';
+  if (avgCell) avgCell.textContent = total > 0 ? fmtVal(total/12) : '';
+
+  // Refresh KPIs and charts after a short delay
+  clearTimeout(window._refreshTimer);
+  window._refreshTimer = setTimeout(async () => {
+    summaryData = await api('/api/financial/summary?year=' + currentYear);
+    updateKPIs();
+    renderDashboardCharts();
+  }, 1500);
+}
+
+// ─── SAVE ENTRY ──────────────────────────────────────────────────────────────
+async function saveEntry(year, month, type, category, amount) {
+  await api('/api/financial/entry', 'POST', { year, month, type, category, amount });
+  showSaved();
+}
+
+function showSaved() {
+  const el = document.getElementById('saveIndicator');
+  el.classList.add('show');
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ─── EXPORT ──────────────────────────────────────────────────────────────────
+function exportExcel() {
+  window.location.href = '/export/excel?year=' + currentYear;
+}
+
+// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
+function showTab(name, el) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tabnav-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ─── CHART HELPERS ────────────────────────────────────────────────────────────
+function destroyChart(id) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+}
+const chartDefaults = {
+  plugins: { legend: { labels: { color: '#7a90b0', font: { size: 11 }, boxWidth: 12 } }, tooltip: { backgroundColor: '#1a2235', titleColor: '#e2eaf5', bodyColor: '#94a3b8', borderColor: '#2d3748', borderWidth: 1 } },
+  responsive: true, maintainAspectRatio: true
+};
+function chartOpts() { return JSON.parse(JSON.stringify(chartDefaults)); }
+function xAxisOpts() { return { ticks: { color: '#7a90b0', font: { size: 11 } }, grid: { color: 'rgba(30,45,71,.3)' } }; }
+function yAxisOpts() { return { ticks: { color: '#7a90b0', font: { size: 11 }, callback: v => '₹' + (v>=100000 ? (v/100000).toFixed(1)+'L' : v>=1000 ? (v/1000).toFixed(0)+'k' : v) }, grid: { color: 'rgba(30,45,71,.3)' } }; }
+function doughnutOpts() {
+  return { plugins: { legend: { position: 'right', labels: { color: '#7a90b0', font: { size: 11 }, boxWidth: 12, padding: 8 } }, tooltip: { backgroundColor: '#1a2235', titleColor: '#e2eaf5', bodyColor: '#94a3b8', borderColor: '#2d3748', borderWidth: 1, callbacks: { label: ctx => ` ₹${Math.round(ctx.parsed).toLocaleString('en-IN')}` } } }, responsive: true, maintainAspectRatio: false };
+}
+
+// ─── API HELPER ──────────────────────────────────────────────────────────────
+async function api(url, method='GET', body=null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  if (!res.ok) throw new Error('API error ' + res.status);
+  return res.json();
+}
+
+// ─── START ───────────────────────────────────────────────────────────────────
+Chart.defaults.color = '#7a90b0';
+init();
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-/home/runner/workspace/src/main/java/com/example/trackerdetails/model/Expenditure.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/controller/FinancialController.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/repository/FinancialRepository.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/model/FinancialEntry.java
 /home/runner/workspace/src/main/java/com/example/trackerdetails/TrackerDetailsApplication.java
-/home/runner/workspace/src/main/java/com/example/trackerdetails/service/ExpenditureService.java
-/home/runner/workspace/src/main/java/com/example/trackerdetails/repository/ExpenditureRepository.java
-/home/runner/workspace/src/main/java/com/example/trackerdetails/controller/ExpenditureController.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/service/FinancialService.java

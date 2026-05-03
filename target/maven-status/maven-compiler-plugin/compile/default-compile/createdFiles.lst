@@ -1,5 +1,5 @@
-com/example/trackerdetails/controller/ExpenditureController.class
-com/example/trackerdetails/repository/ExpenditureRepository.class
+com/example/trackerdetails/service/FinancialService.class
 com/example/trackerdetails/TrackerDetailsApplication.class
-com/example/trackerdetails/service/ExpenditureService.class
-com/example/trackerdetails/model/Expenditure.class
+com/example/trackerdetails/controller/FinancialController.class
+com/example/trackerdetails/model/FinancialEntry.class
+com/example/trackerdetails/repository/FinancialRepository.class

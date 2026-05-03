@@ -1,0 +1,5 @@
+/home/runner/workspace/src/main/java/com/example/trackerdetails/model/Expenditure.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/TrackerDetailsApplication.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/service/ExpenditureService.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/repository/ExpenditureRepository.java
+/home/runner/workspace/src/main/java/com/example/trackerdetails/controller/ExpenditureController.java

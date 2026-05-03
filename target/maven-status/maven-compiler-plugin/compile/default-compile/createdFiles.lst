@@ -1,0 +1,5 @@
+com/example/trackerdetails/controller/ExpenditureController.class
+com/example/trackerdetails/repository/ExpenditureRepository.class
+com/example/trackerdetails/TrackerDetailsApplication.class
+com/example/trackerdetails/service/ExpenditureService.class
+com/example/trackerdetails/model/Expenditure.class
